@@ -15,15 +15,16 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --dark:    #191B29;
-      --mid:     #75767F;
-      --light:   #A3A4AA;
-      --surface: #F2F2F5;
-      --line:    #E8E8EA;
-      --white:   #FFFFFF;
-      --max-w:   1180px;
-      --ph:      40px;    /* horizontal padding */
-      --mk-w:    48px;    /* marker column width */
+      --dark:     #191B29;
+      --mid:      #75767F;
+      --light:    #A3A4AA;
+      --surface:  #F2F2F5;
+      --line:     #E8E8EA;
+      --white:    #FFFFFF;
+      --max-w:    1180px;
+      --ph:       40px;   /* horizontal padding */
+      --mk-w:     48px;   /* marker column width */
+      --dates-w:  160px;  /* dates column width */
     }
 
     html, body { height: 100%; }
@@ -34,17 +35,17 @@
       color: var(--dark);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      overflow: hidden; /* scroll lives in .scroll-wrap */
+      overflow: hidden;
     }
 
     /* ═══════════════════════════════════════
-       HEADER  (max 1180px, centered)
+       HEADER
     ═══════════════════════════════════════ */
     .site-header {
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 200;
-      background: rgba(255, 255, 255, 0.94);
+      background: rgba(255,255,255,0.94);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
     }
@@ -79,8 +80,7 @@
     ═══════════════════════════════════════ */
     .toast {
       position: fixed;
-      bottom: 32px;
-      left: 50%;
+      bottom: 32px; left: 50%;
       transform: translateX(-50%) translateY(10px);
       background: var(--dark);
       color: var(--white);
@@ -98,7 +98,7 @@
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
     /* ═══════════════════════════════════════
-       SCROLL WRAP  (fullscreen snap container)
+       SCROLL WRAP
     ═══════════════════════════════════════ */
     .scroll-wrap {
       position: fixed;
@@ -109,7 +109,7 @@
     }
 
     /* ═══════════════════════════════════════
-       HERO SNAP SECTION
+       HERO
     ═══════════════════════════════════════ */
     .hero-snap {
       height: 100vh;
@@ -129,16 +129,13 @@
       font-size: clamp(22px, 2.4vw, 34px);
       font-weight: 700;
       line-height: 1.35;
-      color: var(--light);          /* base: #A3A4AA */
+      color: var(--light);
       letter-spacing: -0.02em;
     }
-
-    .hero__text .hl {
-      color: var(--dark);           /* "Lisa" + "Principal Product Designer." */
-    }
+    .hero__text .hl { color: var(--dark); }
 
     /* ═══════════════════════════════════════
-       TIMELINE ENTRIES  (each = 100vh snap)
+       TIMELINE ENTRIES
     ═══════════════════════════════════════ */
     .entry {
       height: 100vh;
@@ -149,88 +146,105 @@
       position: relative;
     }
 
-    /* ─── Vertical connecting line ─── */
+    /* ── Vertical line (runs full entry height, trimmed at first/last) ── */
     .entry::after {
       content: '';
       position: absolute;
-      /*
-        X = max(ph + mk_w/2,  50vw − max_w/2 + ph + mk_w/2)
-        Naturally handles both full-width (mobile) and centered (desktop) layouts.
-      */
+      /* X = max(ph + mk_w/2,  50vw − max_w/2 + ph + mk_w/2) */
       left: max(
         calc(var(--ph) + var(--mk-w) / 2),
         calc(50vw - var(--max-w) / 2 + var(--ph) + var(--mk-w) / 2)
       );
-      top: 0;
-      bottom: 0;
+      top: 0; bottom: 0;
       width: 1px;
       background: var(--line);
       pointer-events: none;
       z-index: 0;
     }
-
-    /* First entry: line starts at dot center (50%) — nothing above dot */
     .scroll-wrap > article:first-of-type::after { top: 50%; }
-    /* Last entry: line ends at dot center (50%) — nothing below dot */
     .scroll-wrap > article:last-child::after    { bottom: 50%; }
 
-    /* ─── Inner grid ─── */
+    /* ── 3-column grid ──────────────────────────────────────────────────
+       Col 1 [--mk-w]    : dot marker
+       Col 2 [--dates-w] : date range (row 2) + duration (row 3)
+       Col 3 [1fr]       : company (row 1) + role (row 2) + desc (row 3) + images (row 4)
+
+       Row alignment: first baseline in the role row so date range and
+       role title share the same text baseline.
+    ──────────────────────────────────────────────────────────────────── */
     .entry__inner {
       max-width: var(--max-w);
       width: 100%;
       padding: 0 var(--ph);
       display: grid;
-      grid-template-columns: var(--mk-w) 1fr;
-      gap: 0 24px;
-      align-items: center;
+      grid-template-columns: var(--mk-w) var(--dates-w) 1fr;
+      column-gap: 24px;
+      /* baseline per row — each row's items share first text baseline */
+      align-items: first baseline;
       position: relative;
       z-index: 1;
     }
 
-    /* ─── Marker column ─── */
+    /* ── Col 1: marker ── */
     .entry__marker {
+      grid-column: 1;
+      grid-row: 2;               /* sits in the role-title row */
       display: flex;
       align-items: center;
       justify-content: center;
+      align-self: center;        /* center dot within role-row height */
     }
 
     .entry__dot {
-      width: 12px;
-      height: 12px;
+      width: 12px; height: 12px;
       border-radius: 50%;
       background: var(--dark);
       flex-shrink: 0;
-      position: relative;
-      z-index: 2;
+      position: relative; z-index: 2;
     }
-
-    /* First dot: hollow — white center, dark ring */
+    /* First entry dot: hollow */
     .scroll-wrap > article:first-of-type .entry__dot {
       background: var(--white);
       border: 2px solid var(--dark);
     }
 
-    /* ─── Content column ─── */
+    /* ── Col 2: dates ── */
+    .entry__dates {
+      grid-column: 2;
+      grid-row: 2;               /* same row as role → baseline aligned */
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--dark);
+      white-space: nowrap;
+      letter-spacing: -0.01em;
+    }
+
+    .entry__duration {
+      grid-column: 2;
+      grid-row: 3;
+      font-size: 12px;
+      color: var(--light);
+      align-self: start;
+      padding-top: 14px;         /* visually mirrors description top margin */
+    }
+
+    /* ── Col 3, Row 1: company label ── */
     .entry__company {
-      display: block;
+      grid-column: 3;
+      grid-row: 1;
       font-size: 12px;
       font-weight: 400;
       color: var(--light);
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      margin-bottom: 6px;
+      margin-bottom: 7px;        /* gap before role title row */
       min-height: 14px;
     }
 
-    /* Role title + dates on same row */
-    .entry__header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      gap: 24px;
-    }
-
+    /* ── Col 3, Row 2: role title ── */
     .entry__role {
+      grid-column: 3;
+      grid-row: 2;
       font-size: clamp(18px, 1.7vw, 23px);
       font-weight: 600;
       color: var(--dark);
@@ -238,27 +252,10 @@
       letter-spacing: -0.02em;
     }
 
-    /* Dates — right side, aligned with role baseline */
-    .entry__date-group {
-      text-align: right;
-      flex-shrink: 0;
-    }
-    .entry__dates {
-      display: block;
-      font-size: 14px;
-      font-weight: 400;
-      color: var(--dark);
-      white-space: nowrap;
-      letter-spacing: -0.01em;
-    }
-    .entry__duration {
-      display: block;
-      font-size: 12px;
-      color: var(--light);
-      margin-top: 2px;
-    }
-
+    /* ── Col 3, Row 3: description ── */
     .entry__desc {
+      grid-column: 3;
+      grid-row: 3;
       font-size: 14px;
       font-weight: 400;
       color: var(--mid);
@@ -268,45 +265,46 @@
     }
     .entry__desc p + p { margin-top: 10px; }
 
-    /* ─── Project images ─── */
+    /* ── Col 3, Row 4: images ── */
     .entry__images {
+      grid-column: 3;
+      grid-row: 4;
       display: flex;
       gap: 10px;
       margin-top: 22px;
       flex-wrap: nowrap;
+      align-items: stretch;
     }
 
     .entry__img-wrap {
-      width: 144px;
-      height: 96px;
+      width: 144px; height: 96px;
       border-radius: 8px;
       overflow: hidden;
       background: var(--surface);
       flex-shrink: 0;
       cursor: pointer;
       transition: opacity 0.2s, transform 0.18s;
-      display: block;
     }
     .entry__img-wrap:hover { opacity: 0.82; transform: scale(0.97); }
 
     .entry__img-wrap img {
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       object-fit: cover;
       display: block;
     }
-    /* hide broken-img icon when src is empty */
     .entry__img-wrap img[src=""] { display: none; }
 
+    /* Hidden images — included in lightbox but not shown in timeline */
+    .entry__img-wrap--hidden { display: none; }
+
     .entry__img-more {
-      width: 96px;
-      height: 96px;
+      width: 96px; height: 96px;
       border-radius: 8px;
       background: var(--surface);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       color: var(--mid);
       flex-shrink: 0;
@@ -319,9 +317,8 @@
        LIGHTBOX
     ═══════════════════════════════════════ */
     .lightbox {
-      position: fixed;
-      inset: 0;
-      background: rgba(12, 12, 18, 0.93);
+      position: fixed; inset: 0;
+      background: rgba(12,12,18,0.93);
       z-index: 1000;
       display: flex;
       align-items: center;
@@ -344,7 +341,7 @@
       transition: background 0.15s;
       font-family: inherit;
     }
-    .lb-close:hover { background: rgba(255,255,255,0.2); }
+    .lb-close:hover { background: rgba(255,255,255,0.22); }
 
     .lb-nav {
       position: absolute;
@@ -359,7 +356,7 @@
       font-family: inherit;
       z-index: 1;
     }
-    .lb-nav:hover { background: rgba(255,255,255,0.2); }
+    .lb-nav:hover { background: rgba(255,255,255,0.22); }
     .lb-prev { left: 20px; }
     .lb-next { right: 20px; }
 
@@ -372,8 +369,7 @@
     }
 
     .lb-img {
-      max-width: 100%;
-      max-height: 80vh;
+      max-width: 100%; max-height: 80vh;
       object-fit: contain;
       border-radius: 10px;
       display: block;
@@ -385,8 +381,7 @@
       background: rgba(255,255,255,0.05);
       border-radius: 10px;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      align-items: center; justify-content: center;
       color: rgba(255,255,255,0.3);
       font-size: 14px;
       text-align: center;
@@ -406,21 +401,26 @@
     /* ═══════════════════════════════════════
        RESPONSIVE
     ═══════════════════════════════════════ */
-    @media (max-width: 768px) {
-      :root { --ph: 20px; --mk-w: 32px; }
+    @media (max-width: 900px) {
+      :root { --ph: 28px; --dates-w: 130px; }
+    }
 
-      .entry__inner { gap: 0 14px; }
-      .entry__header { flex-direction: column; align-items: flex-start; gap: 4px; }
-      .entry__date-group { text-align: left; }
-      .entry__role { font-size: 18px; }
-      .entry__desc { font-size: 14px; max-width: 100%; }
-      .entry__img-wrap { width: 108px; height: 72px; }
-      .entry__img-more { width: 72px; height: 72px; }
+    @media (max-width: 680px) {
+      :root { --ph: 20px; --mk-w: 32px; --dates-w: 110px; }
+
+      .entry__inner { column-gap: 14px; }
+      .entry__role  { font-size: 17px; }
+      .entry__dates { font-size: 13px; }
+      .entry__desc  { font-size: 13px; max-width: 100%; }
+      .entry__img-wrap { width: 110px; height: 74px; }
+      .entry__img-more { width: 74px; height: 74px; }
     }
 
     @media (max-width: 480px) {
-      .hero__text { font-size: 20px; }
-      .entry__role { font-size: 16px; }
+      :root { --dates-w: 90px; }
+      .hero__text   { font-size: 20px; }
+      .entry__role  { font-size: 16px; }
+      .entry__dates { font-size: 12px; white-space: normal; }
     }
   </style>
 </head>
@@ -432,9 +432,7 @@
       <a class="nav-link"
          href="https://drive.google.com/file/d/19tb9gj1e-qZ0qulqctaSGvokbVMu8o4n/view?usp=sharing"
          target="_blank" rel="noopener noreferrer">cv</a>
-
       <button class="nav-link" id="emailBtn" type="button">email</button>
-
       <a class="nav-link"
          href="https://www.linkedin.com/in/lisaulianova/"
          target="_blank" rel="noopener noreferrer">linkedin</a>
@@ -458,227 +456,197 @@
       </div>
     </section>
 
-    <!-- ── ENTRY 1  (first dot = hollow) ── -->
+    <!-- ══════════════════════════════════════
+         ENTRY STRUCTURE (3-column grid):
+         Col 1 · Col 2     · Col 3
+         ─────────────────────────────────────
+         –     · –         · company   (row 1)
+         dot   · date range · role     (row 2)  ← baseline aligned
+         –     · duration   · desc     (row 3)
+         –     · –          · images   (row 4)
+    ══════════════════════════════════════ -->
+
+    <!-- ── ENTRY 1  ·  iGaming  ── -->
     <article class="entry">
       <div class="entry__inner">
         <div class="entry__marker"><div class="entry__dot"></div></div>
-        <div class="entry__content">
-          <span class="entry__company">iGaming</span>
-          <div class="entry__header">
-            <h2 class="entry__role">Product Design Team Lead</h2>
-            <div class="entry__date-group">
-              <span class="entry__dates">02/2026 — now</span>
-              <span class="entry__duration">2 month</span>
-            </div>
-          </div>
-          <div class="entry__desc">
-            <p>Improving the user experience of buying new&amp;used cars</p>
-          </div>
+        <span class="entry__dates">02/2026 — now</span>
+        <span class="entry__company">iGaming</span>
+        <h2 class="entry__role">Product Design Team Lead</h2>
+        <span class="entry__duration">2 month</span>
+        <div class="entry__desc">
+          <p>Improving the user experience of buying new&amp;used cars</p>
         </div>
       </div>
     </article>
 
-    <!-- ── ENTRY 2 ── -->
+    <!-- ── ENTRY 2  ·  Avito  ── -->
     <article class="entry">
       <div class="entry__inner">
         <div class="entry__marker"><div class="entry__dot"></div></div>
-        <div class="entry__content">
-          <span class="entry__company">Avito</span>
-          <div class="entry__header">
-            <h2 class="entry__role">Principal Product Designer</h2>
-            <div class="entry__date-group">
-              <span class="entry__dates">12/2024 — 09/2025</span>
-              <span class="entry__duration">10 month</span>
-            </div>
-          </div>
-          <div class="entry__desc">
-            <p>Designed a new car-buying experience directly from manufacturers bypassing intermediaries and redesigned the purchase flow for new cars from dealers. This resulted in a +7% incremental buyer increase, a +5% incremental growth for CPA, and an incremental revenue for CPA uplift from $30k to $65k</p>
-          </div>
+        <span class="entry__dates">12/2024 — 09/2025</span>
+        <span class="entry__company">Avito</span>
+        <h2 class="entry__role">Principal Product Designer</h2>
+        <span class="entry__duration">10 month</span>
+        <div class="entry__desc">
+          <p>Designed a new car-buying experience directly from manufacturers bypassing intermediaries and redesigned the purchase flow for new cars from dealers. This resulted in a +7% incremental buyer increase, a +5% incremental growth for CPA, and an incremental revenue for CPA uplift from $30k to $65k</p>
         </div>
       </div>
     </article>
 
-    <!-- ── ENTRY 3 ── -->
+    <!-- ── ENTRY 3  ·  Megamarket  ── -->
     <article class="entry">
       <div class="entry__inner">
         <div class="entry__marker"><div class="entry__dot"></div></div>
-        <div class="entry__content">
-          <span class="entry__company">Megamarket</span>
-          <div class="entry__header">
-            <h2 class="entry__role">Principal Product Design</h2>
-            <div class="entry__date-group">
-              <span class="entry__dates">09/2023 — 12/2024</span>
-              <span class="entry__duration">1y 3m</span>
-            </div>
+        <span class="entry__dates">09/2023 — 12/2024</span>
+        <span class="entry__company">Megamarket</span>
+        <h2 class="entry__role">Principal Product Design</h2>
+        <span class="entry__duration">1y 3m</span>
+        <div class="entry__desc">
+          <p>Formed from scratch a unified vision of the marketplace product. Assembled a loyal team of 12 designers. Implemented and optimized design processes for faster, high-quality execution, aligning with business goals. All this increased the purchase conversion in the fashion, beauty, FMCG, and home goods categories by 4 times and increased total GMV by 5%, to $358 million per year</p>
+        </div>
+        <div class="entry__images">
+          <!-- 3 visible thumbnails -->
+          <div class="entry__img-wrap" data-lb>
+            <img src="megamarket1.png" alt="Megamarket — 1">
           </div>
-          <div class="entry__desc">
-            <p>Formed from scratch a unified vision of the marketplace product. Assembled a loyal team of 12 designers. Implemented and optimized design processes for faster, high-quality execution, aligning with business goals. All this increased the purchase conversion in the fashion, beauty, FMCG, and home goods categories by 4 times and increased total GMV by 5%, to $358 million per year</p>
+          <div class="entry__img-wrap" data-lb>
+            <img src="megamarket2.png" alt="Megamarket — 2">
           </div>
-          <div class="entry__images">
-            <!-- Replace the divs with: <div class="entry__img-wrap" data-lb><img src="your-img.jpg" alt="..."></div> -->
-            <div class="entry__img-wrap" data-lb><img src="" alt="Megamarket — project 1"></div>
-            <div class="entry__img-wrap" data-lb><img src="" alt="Megamarket — project 2"></div>
-            <div class="entry__img-wrap" data-lb><img src="" alt="Megamarket — project 3"></div>
-            <div class="entry__img-more" data-lb>+3</div>
+          <div class="entry__img-wrap" data-lb>
+            <img src="megamarket3.png" alt="Megamarket — 3">
           </div>
+          <!-- 4 hidden images (accessible via lightbox) -->
+          <div class="entry__img-wrap entry__img-wrap--hidden" data-lb>
+            <img src="megamarket4.png" alt="Megamarket — 4">
+          </div>
+          <div class="entry__img-wrap entry__img-wrap--hidden" data-lb>
+            <img src="megamarket5.png" alt="Megamarket — 5">
+          </div>
+          <div class="entry__img-wrap entry__img-wrap--hidden" data-lb>
+            <img src="megamarket6.png" alt="Megamarket — 6">
+          </div>
+          <div class="entry__img-wrap entry__img-wrap--hidden" data-lb>
+            <img src="megamarket7.png" alt="Megamarket — 7">
+          </div>
+          <!-- "+4" opens lightbox at 4th image -->
+          <div class="entry__img-more" data-lb-more>+4</div>
         </div>
       </div>
     </article>
 
-    <!-- ── ENTRY 4 ── -->
+    <!-- ── ENTRY 4  ·  Samokat  ── -->
     <article class="entry">
       <div class="entry__inner">
         <div class="entry__marker"><div class="entry__dot"></div></div>
-        <div class="entry__content">
-          <span class="entry__company">Samokat</span>
-          <div class="entry__header">
-            <h2 class="entry__role">Senior Product Designer</h2>
-            <div class="entry__date-group">
-              <span class="entry__dates">06/2023 — 09/2023</span>
-              <span class="entry__duration">3 month</span>
-            </div>
-          </div>
-          <div class="entry__desc">
-            <p>Designed a team communication platform for 10&thinsp;000 employees</p>
-          </div>
+        <span class="entry__dates">06/2023 — 09/2023</span>
+        <span class="entry__company">Samokat</span>
+        <h2 class="entry__role">Senior Product Designer</h2>
+        <span class="entry__duration">3 month</span>
+        <div class="entry__desc">
+          <p>Designed a team communication platform for 10&thinsp;000 employees</p>
         </div>
       </div>
     </article>
 
-    <!-- ── ENTRY 5 ── -->
+    <!-- ── ENTRY 5  ·  Viju  ── -->
     <article class="entry">
       <div class="entry__inner">
         <div class="entry__marker"><div class="entry__dot"></div></div>
-        <div class="entry__content">
-          <span class="entry__company">Viju</span>
-          <div class="entry__header">
-            <h2 class="entry__role">Senior Product Designer</h2>
-            <div class="entry__date-group">
-              <span class="entry__dates">10/2020 — 12/2022</span>
-              <span class="entry__duration">2y 2m</span>
-            </div>
-          </div>
-          <div class="entry__desc">
-            <p>Designed a new streaming service for Viasat Global with viral short videos functionality. The service's market share is 85.4% of Eastern European households and about 92 million viewers</p>
-            <p>Designed the content management system of the new streaming service "VIJU", which includes more than 2,000 items of content</p>
-          </div>
-          <div class="entry__images">
-            <div class="entry__img-wrap" data-lb><img src="" alt="Viasat — project 1"></div>
-            <div class="entry__img-wrap" data-lb><img src="" alt="Viasat — project 2"></div>
-            <div class="entry__img-wrap" data-lb><img src="" alt="Viasat — project 3"></div>
-          </div>
+        <span class="entry__dates">10/2020 — 12/2022</span>
+        <span class="entry__company">Viju</span>
+        <h2 class="entry__role">Senior Product Designer</h2>
+        <span class="entry__duration">2y 2m</span>
+        <div class="entry__desc">
+          <p>Designed a new streaming service for Viasat Global with viral short videos functionality. The service's market share is 85.4% of Eastern European households and about 92 million viewers</p>
+          <p>Designed the content management system of the new streaming service "VIJU", which includes more than 2,000 items of content</p>
+        </div>
+        <div class="entry__images">
+          <div class="entry__img-wrap" data-lb><img src="" alt="Viju — 1"></div>
+          <div class="entry__img-wrap" data-lb><img src="" alt="Viju — 2"></div>
+          <div class="entry__img-wrap" data-lb><img src="" alt="Viju — 3"></div>
         </div>
       </div>
     </article>
 
-    <!-- ── ENTRY 6 ── -->
+    <!-- ── ENTRY 6  ·  Brag House  ── -->
     <article class="entry">
       <div class="entry__inner">
         <div class="entry__marker"><div class="entry__dot"></div></div>
-        <div class="entry__content">
-          <span class="entry__company">Brag House</span>
-          <div class="entry__header">
-            <h2 class="entry__role">Senior Product Designer</h2>
-            <div class="entry__date-group">
-              <span class="entry__dates">06/2022 — 12/2022</span>
-              <span class="entry__duration">6 month</span>
-            </div>
-          </div>
-          <div class="entry__desc">
-            <p>Designed the MVP of the "BragHouse" esports app to attract investment, which raised a total of $6.71M</p>
-          </div>
-          <div class="entry__images">
-            <div class="entry__img-wrap" data-lb><img src="" alt="Ring House — project 1"></div>
-            <div class="entry__img-wrap" data-lb><img src="" alt="Ring House — project 2"></div>
-            <div class="entry__img-wrap" data-lb><img src="" alt="Ring House — project 3"></div>
-          </div>
+        <span class="entry__dates">06/2022 — 12/2022</span>
+        <span class="entry__company">Brag House</span>
+        <h2 class="entry__role">Senior Product Designer</h2>
+        <span class="entry__duration">6 month</span>
+        <div class="entry__desc">
+          <p>Designed the MVP of the "BragHouse" esports app to attract investment, which raised a total of $6.71M</p>
+        </div>
+        <div class="entry__images">
+          <div class="entry__img-wrap" data-lb><img src="" alt="Brag House — 1"></div>
+          <div class="entry__img-wrap" data-lb><img src="" alt="Brag House — 2"></div>
+          <div class="entry__img-wrap" data-lb><img src="" alt="Brag House — 3"></div>
         </div>
       </div>
     </article>
 
-    <!-- ── ENTRY 7 ── -->
+    <!-- ── ENTRY 7  ·  SberMarket  ── -->
     <article class="entry">
       <div class="entry__inner">
         <div class="entry__marker"><div class="entry__dot"></div></div>
-        <div class="entry__content">
-          <span class="entry__company">SberMarket</span>
-          <div class="entry__header">
-            <h2 class="entry__role">Senior Product Designer</h2>
-            <div class="entry__date-group">
-              <span class="entry__dates">11/2021 — 02/2022</span>
-              <span class="entry__duration">3 month</span>
-            </div>
-          </div>
-          <div class="entry__desc">
-            <p>Designed a HR service from scratch for «SberMarket». The company has over 17,000 employees and contractors in 165 cities and has delivered over 8M orders to date</p>
-          </div>
-          <div class="entry__images">
-            <div class="entry__img-wrap" data-lb><img src="" alt="SberMarket — project 1"></div>
-            <div class="entry__img-wrap" data-lb><img src="" alt="SberMarket — project 2"></div>
-            <div class="entry__img-wrap" data-lb><img src="" alt="SberMarket — project 3"></div>
-          </div>
+        <span class="entry__dates">11/2021 — 02/2022</span>
+        <span class="entry__company">SberMarket</span>
+        <h2 class="entry__role">Senior Product Designer</h2>
+        <span class="entry__duration">3 month</span>
+        <div class="entry__desc">
+          <p>Designed a HR service from scratch for «SberMarket». The company has over 17,000 employees and contractors in 165 cities and has delivered over 8M orders to date</p>
+        </div>
+        <div class="entry__images">
+          <div class="entry__img-wrap" data-lb><img src="" alt="SberMarket — 1"></div>
+          <div class="entry__img-wrap" data-lb><img src="" alt="SberMarket — 2"></div>
+          <div class="entry__img-wrap" data-lb><img src="" alt="SberMarket — 3"></div>
         </div>
       </div>
     </article>
 
-<!-- ── ENTRY 8 ── -->
+    <!-- ── ENTRY 8  ·  Revain  ── -->
     <article class="entry">
       <div class="entry__inner">
         <div class="entry__marker"><div class="entry__dot"></div></div>
-        <div class="entry__content">
-          <span class="entry__company">Revain</span>
-          <div class="entry__header">
-            <h2 class="entry__role">Middle Product Designer</h2>
-            <div class="entry__date-group">
-              <span class="entry__dates">03/2020 — 09/2020</span>
-              <span class="entry__duration">6 month</span>
-            </div>
-          </div>
-          <div class="entry__desc">
-            <p>Created a design system from scratch and implemented a gamification option for a review platform with more than 5.5 million products and almost 50 thousand authors</p>
-          </div>
+        <span class="entry__dates">03/2020 — 09/2020</span>
+        <span class="entry__company">Revain</span>
+        <h2 class="entry__role">Middle Product Designer</h2>
+        <span class="entry__duration">6 month</span>
+        <div class="entry__desc">
+          <p>Created a design system from scratch and implemented a gamification option for a review platform with more than 5.5 million products and almost 50 thousand authors</p>
         </div>
       </div>
     </article>
 
-    <!-- ── ENTRY 9 ── -->
+    <!-- ── ENTRY 9  ·  Miro  ── -->
     <article class="entry">
       <div class="entry__inner">
         <div class="entry__marker"><div class="entry__dot"></div></div>
-        <div class="entry__content">
-          <span class="entry__company">Miro</span>
-          <div class="entry__header">
-            <h2 class="entry__role">Middle Product Designer</h2>
-            <div class="entry__date-group">
-              <span class="entry__dates">05/2020 — 07/2020</span>
-              <span class="entry__duration">3 month</span>
-            </div>
-          </div>
-          <div class="entry__desc">
-            <p>Designed a recognition and generation tool based on neural networks, that Miro presented in 2023 called Miro AI</p>
-          </div>
+        <span class="entry__dates">05/2020 — 07/2020</span>
+        <span class="entry__company">Miro</span>
+        <h2 class="entry__role">Middle Product Designer</h2>
+        <span class="entry__duration">3 month</span>
+        <div class="entry__desc">
+          <p>Designed a recognition and generation tool based on neural networks, that Miro presented in 2023 called Miro AI</p>
         </div>
       </div>
     </article>
 
-    <!-- ── ENTRY 10  (last) ── -->
+    <!-- ── ENTRY 10  ·  Financial sector  (last) ── -->
     <article class="entry">
       <div class="entry__inner">
         <div class="entry__marker"><div class="entry__dot"></div></div>
-        <div class="entry__content">
-          <span class="entry__company">Financial sector</span>
-          <div class="entry__header">
-            <h2 class="entry__role">IT analytics and management</h2>
-            <div class="entry__date-group">
-              <span class="entry__dates">before 2019</span>
-              <span class="entry__duration">3 years</span>
-            </div>
-          </div>
-          <div class="entry__desc">
-            <p>• Implemented a project management tool in the work of the project team</p> 
-            <p>• Coordinated the development and implementation of new software for financial reporting in 60 subjects of the Moscow region</p> 
-            <p>• Coordinated the development and implementation of new salary calculation software in 65 subjects of the Russian Federation</p>
-          </div>
+        <span class="entry__dates">before 2019</span>
+        <span class="entry__company">Financial sector</span>
+        <h2 class="entry__role">IT analytics and management</h2>
+        <span class="entry__duration">3 years</span>
+        <div class="entry__desc">
+          <p>• Implemented a project management tool in the work of the project team</p>
+          <p>• Coordinated the development and implementation of new software for financial reporting in 60 subjects of the Moscow region</p>
+          <p>• Coordinated the development and implementation of new salary calculation software in 65 subjects of the Russian Federation</p>
         </div>
       </div>
     </article>
@@ -687,9 +655,8 @@
 
   <!-- ═══ LIGHTBOX ═══ -->
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Project gallery">
-    <button class="lb-close"  id="lbClose" aria-label="Close">&#x2715;</button>
+    <button class="lb-close" id="lbClose" aria-label="Close">&#x2715;</button>
     <button class="lb-nav lb-prev" id="lbPrev" aria-label="Previous">&#8249;</button>
-
     <div class="lb-stage" id="lbStage">
       <img class="lb-img" id="lbImg" src="" alt="">
       <div class="lb-empty" id="lbEmpty">
@@ -697,7 +664,6 @@
         Replace <code>src=""</code> in the HTML with your image path.
       </div>
     </div>
-
     <button class="lb-nav lb-next" id="lbNext" aria-label="Next">&#8250;</button>
     <span class="lb-counter" id="lbCounter"></span>
   </div>
@@ -708,19 +674,14 @@
     /* ── Email copy ─────────────────────────────── */
     document.getElementById('emailBtn').addEventListener('click', function () {
       var email = 'elizabethulianova@gmail.com';
-
       function showToast() {
         var t = document.getElementById('toast');
         t.classList.add('show');
         setTimeout(function () { t.classList.remove('show'); }, 3400);
       }
-
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(email).then(showToast).catch(fallback);
-      } else {
-        fallback();
-      }
-
+      } else { fallback(); }
       function fallback() {
         var ta = document.createElement('textarea');
         ta.value = email;
@@ -734,6 +695,7 @@
     });
 
     /* ── Lightbox ───────────────────────────────── */
+    /* Collect all [data-lb] items — includes hidden ones (for nav) */
     var lbItems   = Array.from(document.querySelectorAll('[data-lb]'));
     var lbIndex   = 0;
     var lightbox  = document.getElementById('lightbox');
@@ -741,14 +703,12 @@
     var lbEmpty   = document.getElementById('lbEmpty');
     var lbCounter = document.getElementById('lbCounter');
 
-    /* Get raw src attribute (not the browser-resolved URL) */
     function getRawSrc(item) {
       var img = item.querySelector('img');
       if (!img) return null;
       var src = img.getAttribute('src');
       return src && src.trim() ? src : null;
     }
-
     function getAlt(item) {
       var img = item.querySelector('img');
       return img ? (img.getAttribute('alt') || '') : '';
@@ -760,40 +720,48 @@
       if (src) {
         lbImg.src = src;
         lbImg.alt = getAlt(item);
-        lbImg.style.display  = 'block';
+        lbImg.style.display   = 'block';
         lbEmpty.style.display = 'none';
       } else {
         lbImg.src = '';
-        lbImg.style.display  = 'none';
+        lbImg.style.display   = 'none';
         lbEmpty.style.display = 'flex';
       }
       lbCounter.textContent = (lbIndex + 1) + ' / ' + lbItems.length;
     }
 
     function openLb(i) {
-      lbIndex = i;
+      lbIndex = Math.max(0, Math.min(i, lbItems.length - 1));
       renderLb();
       lightbox.classList.add('open');
       document.getElementById('lbClose').focus();
     }
+    function closeLb()  { lightbox.classList.remove('open'); }
+    function prevLb()   { lbIndex = (lbIndex - 1 + lbItems.length) % lbItems.length; renderLb(); }
+    function nextLb()   { lbIndex = (lbIndex + 1) % lbItems.length; renderLb(); }
 
-    function closeLb() { lightbox.classList.remove('open'); }
-
-    function prevLb() { lbIndex = (lbIndex - 1 + lbItems.length) % lbItems.length; renderLb(); }
-    function nextLb() { lbIndex = (lbIndex + 1) % lbItems.length; renderLb(); }
-
+    /* Visible image wrappers → click opens lightbox at their index */
     lbItems.forEach(function (item, i) {
       item.addEventListener('click', function () { openLb(i); });
+    });
+
+    /* "+N" buttons → open lightbox at the first hidden sibling */
+    document.querySelectorAll('[data-lb-more]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var hiddenSibling = btn.parentElement
+          .querySelector('.entry__img-wrap--hidden[data-lb]');
+        if (hiddenSibling) {
+          openLb(lbItems.indexOf(hiddenSibling));
+        }
+      });
     });
 
     document.getElementById('lbClose').addEventListener('click', closeLb);
     document.getElementById('lbPrev').addEventListener('click', prevLb);
     document.getElementById('lbNext').addEventListener('click', nextLb);
-
     lightbox.addEventListener('click', function (e) {
       if (e.target === lightbox) closeLb();
     });
-
     document.addEventListener('keydown', function (e) {
       if (!lightbox.classList.contains('open')) return;
       if (e.key === 'Escape')     closeLb();
