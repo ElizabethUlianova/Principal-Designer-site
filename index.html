@@ -16,16 +16,15 @@
 
     :root {
       --dark:     #191B29;
-      --mid:      #62636A;
-      --light:    #888991;
-      --addlight: #A3A4AA;
+      --mid:      #75767F;
+      --light:    #A3A4AA;
       --surface:  #F2F2F5;
       --line:     #E8E8EA;
       --white:    #FFFFFF;
       --max-w:    1180px;
-      --ph:       40px;   /* horizontal padding */
-      --mk-w:     48px;   /* marker column width */
-      --dates-w:  160px;  /* dates column width */
+      --ph:       40px;
+      --mk-w:     48px;
+      --dates-w:  160px;
     }
 
     html, body { height: 100%; }
@@ -130,7 +129,7 @@
       font-size: clamp(22px, 2.4vw, 34px);
       font-weight: 700;
       line-height: 1.35;
-      color: var(--addlight);
+      color: var(--light);
       letter-spacing: -0.02em;
     }
     .hero__text .hl { color: var(--dark); }
@@ -147,11 +146,10 @@
       position: relative;
     }
 
-    /* ── Vertical line (runs full entry height, trimmed at first/last) ── */
+    /* ── Vertical line ── */
     .entry::after {
       content: '';
       position: absolute;
-      /* X = max(ph + mk_w/2,  50vw − max_w/2 + ph + mk_w/2) */
       left: max(
         calc(var(--ph) + var(--mk-w) / 2),
         calc(50vw - var(--max-w) / 2 + var(--ph) + var(--mk-w) / 2)
@@ -162,17 +160,11 @@
       pointer-events: none;
       z-index: 0;
     }
-    .scroll-wrap > article:first-of-type::after { top: 50%; }
+    /* JS measures first dot and sets --line-top so line starts exactly at dot */
+    .scroll-wrap > article:first-of-type::after { top: var(--line-top, 50%); }
     .scroll-wrap > article:last-child::after    { bottom: 50%; }
 
-    /* ── 3-column grid ──────────────────────────────────────────────────
-       Col 1 [--mk-w]    : dot marker
-       Col 2 [--dates-w] : date range (row 2) + duration (row 3)
-       Col 3 [1fr]       : company (row 1) + role (row 2) + desc (row 3) + images (row 4)
-
-       Row alignment: first baseline in the role row so date range and
-       role title share the same text baseline.
-    ──────────────────────────────────────────────────────────────────── */
+    /* ── 3-column grid ── */
     .entry__inner {
       max-width: var(--max-w);
       width: 100%;
@@ -180,20 +172,19 @@
       display: grid;
       grid-template-columns: var(--mk-w) var(--dates-w) 1fr;
       column-gap: 24px;
-      /* baseline per row — each row's items share first text baseline */
       align-items: first baseline;
       position: relative;
       z-index: 1;
     }
 
-    /* ── Col 1: marker ── */
+    /* Col 1: marker */
     .entry__marker {
       grid-column: 1;
-      grid-row: 2;               /* sits in the role-title row */
+      grid-row: 2;
       display: flex;
       align-items: center;
       justify-content: center;
-      align-self: center;        /* center dot within role-row height */
+      align-self: center;
     }
 
     .entry__dot {
@@ -203,16 +194,15 @@
       flex-shrink: 0;
       position: relative; z-index: 2;
     }
-    /* First entry dot: hollow */
     .scroll-wrap > article:first-of-type .entry__dot {
       background: var(--white);
       border: 2px solid var(--dark);
     }
 
-    /* ── Col 2: dates ── */
+    /* Col 2: dates */
     .entry__dates {
       grid-column: 2;
-      grid-row: 2;               /* same row as role → baseline aligned */
+      grid-row: 2;
       font-size: 14px;
       font-weight: 400;
       color: var(--dark);
@@ -226,10 +216,10 @@
       font-size: 12px;
       color: var(--light);
       align-self: start;
-      padding-top: 12px;         /* visually mirrors description top margin */
+      padding-top: 14px;
     }
 
-    /* ── Col 3, Row 1: company label ── */
+    /* Col 3, Row 1: company */
     .entry__company {
       grid-column: 3;
       grid-row: 1;
@@ -238,11 +228,11 @@
       color: var(--light);
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      margin-bottom: 7px;        /* gap before role title row */
+      margin-bottom: 7px;
       min-height: 14px;
     }
 
-    /* ── Col 3, Row 2: role title ── */
+    /* Col 3, Row 2: role */
     .entry__role {
       grid-column: 3;
       grid-row: 2;
@@ -253,7 +243,7 @@
       letter-spacing: -0.02em;
     }
 
-    /* ── Col 3, Row 3: description ── */
+    /* Col 3, Row 3: description */
     .entry__desc {
       grid-column: 3;
       grid-row: 3;
@@ -261,24 +251,24 @@
       font-weight: 400;
       color: var(--mid);
       line-height: 1.75;
-      max-width: 500px;
-      margin-top: 12px;
+      max-width: 560px;
+      margin-top: 14px;
     }
     .entry__desc p + p { margin-top: 10px; }
 
-    /* ── Col 3, Row 4: images ── */
+    /* Col 3, Row 4: images */
     .entry__images {
       grid-column: 3;
       grid-row: 4;
       display: flex;
-      gap: 8px;
+      gap: 10px;
       margin-top: 22px;
       flex-wrap: nowrap;
       align-items: stretch;
     }
 
     .entry__img-wrap {
-      width: 130px; height: 86px;
+      width: 144px; height: 96px;
       border-radius: 8px;
       overflow: hidden;
       background: var(--surface);
@@ -295,11 +285,10 @@
     }
     .entry__img-wrap img[src=""] { display: none; }
 
-    /* Hidden images — included in lightbox but not shown in timeline */
     .entry__img-wrap--hidden { display: none; }
 
     .entry__img-more {
-      width: 86px; height: 86px;
+      width: 96px; height: 96px;
       border-radius: 8px;
       background: var(--surface);
       display: flex;
@@ -327,6 +316,7 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.24s ease;
+      padding-bottom: 96px; /* room for carousel */
     }
     .lightbox.open { opacity: 1; pointer-events: all; }
 
@@ -346,7 +336,8 @@
 
     .lb-nav {
       position: absolute;
-      top: 50%; transform: translateY(-50%);
+      top: calc(50% - 48px);
+      transform: translateY(-50%);
       width: 48px; height: 48px;
       background: rgba(255,255,255,0.1);
       border: none; border-radius: 50%;
@@ -363,14 +354,14 @@
 
     .lb-stage {
       max-width: min(90vw, 1000px);
-      max-height: 82vh;
+      max-height: 75vh;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
     .lb-img {
-      max-width: 100%; max-height: 80vh;
+      max-width: 100%; max-height: 75vh;
       object-fit: contain;
       border-radius: 10px;
       display: block;
@@ -378,7 +369,7 @@
 
     .lb-empty {
       width: 640px; max-width: 80vw;
-      height: 420px; max-height: 60vh;
+      height: 380px; max-height: 55vh;
       background: rgba(255,255,255,0.05);
       border-radius: 10px;
       display: flex;
@@ -390,14 +381,52 @@
       line-height: 1.6;
     }
 
-    .lb-counter {
+    /* ── Thumbnail carousel ── */
+    .lb-carousel-wrap {
       position: absolute;
-      bottom: 20px; left: 50%;
-      transform: translateX(-50%);
-      color: rgba(255,255,255,0.45);
-      font-size: 12px;
-      letter-spacing: 0.06em;
+      bottom: 20px;
+      left: 0; right: 0;
+      height: 66px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
     }
+
+    .lb-carousel {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 16px;
+      position: relative; /* so children's offsetLeft is relative to this */
+      transition: transform 0.32s cubic-bezier(0.33, 1, 0.68, 1);
+      will-change: transform;
+    }
+
+    .lb-thumb {
+      height: 50px;
+      width: auto;
+      min-width: 50px;
+      flex-shrink: 0;
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      opacity: 0.35;
+      transition: opacity 0.2s ease, box-shadow 0.2s ease;
+      background: rgba(255,255,255,0.1);
+    }
+    .lb-thumb img {
+      height: 50px;
+      width: auto;
+      display: block;
+      pointer-events: none;
+      user-select: none;
+    }
+    .lb-thumb--empty { width: 75px; }
+    .lb-thumb--active {
+      opacity: 1;
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.9);
+    }
+    .lb-thumb:hover:not(.lb-thumb--active) { opacity: 0.6; }
 
     /* ═══════════════════════════════════════
        RESPONSIVE
@@ -408,7 +437,6 @@
 
     @media (max-width: 680px) {
       :root { --ph: 20px; --mk-w: 32px; --dates-w: 110px; }
-
       .entry__inner { column-gap: 14px; }
       .entry__role  { font-size: 17px; }
       .entry__dates { font-size: 13px; }
@@ -421,7 +449,7 @@
       :root { --dates-w: 90px; }
       .hero__text   { font-size: 20px; }
       .entry__role  { font-size: 16px; }
-      .entry__dates { font-size: 14px; white-space: normal; }
+      .entry__dates { font-size: 12px; white-space: normal; }
     }
   </style>
 </head>
@@ -457,16 +485,6 @@
       </div>
     </section>
 
-    <!-- ══════════════════════════════════════
-         ENTRY STRUCTURE (3-column grid):
-         Col 1 · Col 2     · Col 3
-         ─────────────────────────────────────
-         –     · –         · company   (row 1)
-         dot   · date range · role     (row 2)  ← baseline aligned
-         –     · duration   · desc     (row 3)
-         –     · –          · images   (row 4)
-    ══════════════════════════════════════ -->
-
     <!-- ── ENTRY 1  ·  iGaming  ── -->
     <article class="entry">
       <div class="entry__inner">
@@ -476,7 +494,7 @@
         <h2 class="entry__role">Product Design Team Lead</h2>
         <span class="entry__duration">2 month</span>
         <div class="entry__desc">
-          <p>I lead a team of 3 designers across 2 products, improving quality through structured product thinking and growth plans. I establish core design processes — critiques, handoff standards, and component governance — and implement AI tools (Figma Make, Claude, Cursor) to speed up design processes. I embed design into the company’s strategy as a core function alongside product and development.</p>
+          <p>Improving the user experience of buying new&amp;used cars</p>
         </div>
       </div>
     </article>
@@ -507,30 +525,27 @@
           <p>Formed from scratch a unified vision of the marketplace product. Assembled a loyal team of 12 designers. Implemented and optimized design processes for faster, high-quality execution, aligning with business goals. All this increased the purchase conversion in the fashion, beauty, FMCG, and home goods categories by 4 times and increased total GMV by 5%, to $358 million per year</p>
         </div>
         <div class="entry__images">
-          <!-- 3 visible thumbnails -->
           <div class="entry__img-wrap" data-lb>
-            <img src="megamarket1.png" alt="Megamarket — 1">
-          </div>
-          <div class="entry__img-wrap" data-lb>
-            <img src="megamarket2.png" alt="Megamarket — 2">
+            <img src="Images/megamarket1.png" alt="Megamarket — 1">
           </div>
           <div class="entry__img-wrap" data-lb>
-            <img src="megamarket3.png" alt="Megamarket — 3">
+            <img src="Images/megamarket2.png" alt="Megamarket — 2">
           </div>
-          <!-- 4 hidden images (accessible via lightbox) -->
-          <div class="entry__img-wrap entry__img-wrap--hidden" data-lb>
-            <img src="megamarket4.png" alt="Megamarket — 4">
-          </div>
-          <div class="entry__img-wrap entry__img-wrap--hidden" data-lb>
-            <img src="megamarket5.png" alt="Megamarket — 5">
+          <div class="entry__img-wrap" data-lb>
+            <img src="Images/megamarket3.png" alt="Megamarket — 3">
           </div>
           <div class="entry__img-wrap entry__img-wrap--hidden" data-lb>
-            <img src="megamarket6.png" alt="Megamarket — 6">
+            <img src="Images/megamarket4.png" alt="Megamarket — 4">
           </div>
           <div class="entry__img-wrap entry__img-wrap--hidden" data-lb>
-            <img src="megamarket7.png" alt="Megamarket — 7">
+            <img src="Images/megamarket5.png" alt="Megamarket — 5">
           </div>
-          <!-- "+4" opens lightbox at 4th image -->
+          <div class="entry__img-wrap entry__img-wrap--hidden" data-lb>
+            <img src="Images/megamarket6.png" alt="Megamarket — 6">
+          </div>
+          <div class="entry__img-wrap entry__img-wrap--hidden" data-lb>
+            <img src="Images/megamarket7.png" alt="Megamarket — 7">
+          </div>
           <div class="entry__img-more" data-lb-more>+4</div>
         </div>
       </div>
@@ -563,9 +578,9 @@
           <p>Designed the content management system of the new streaming service "VIJU", which includes more than 2,000 items of content</p>
         </div>
         <div class="entry__images">
-          <div class="entry__img-wrap" data-lb><img src="" alt="Viju — 1"></div>
-          <div class="entry__img-wrap" data-lb><img src="" alt="Viju — 2"></div>
-          <div class="entry__img-wrap" data-lb><img src="" alt="Viju — 3"></div>
+          <div class="entry__img-wrap" data-lb><img src="Images/viju1.png" alt="Viju — 1"></div>
+          <div class="entry__img-wrap" data-lb><img src="Images/viju2.png" alt="Viju — 2"></div>
+          <div class="entry__img-wrap" data-lb><img src="Images/viju3.png" alt="Viju — 3"></div>
         </div>
       </div>
     </article>
@@ -582,9 +597,9 @@
           <p>Designed the MVP of the "BragHouse" esports app to attract investment, which raised a total of $6.71M</p>
         </div>
         <div class="entry__images">
-          <div class="entry__img-wrap" data-lb><img src="" alt="Brag House — 1"></div>
-          <div class="entry__img-wrap" data-lb><img src="" alt="Brag House — 2"></div>
-          <div class="entry__img-wrap" data-lb><img src="" alt="Brag House — 3"></div>
+          <div class="entry__img-wrap" data-lb><img src="Images/bh1.png" alt="Brag House — 1"></div>
+          <div class="entry__img-wrap" data-lb><img src="Images/bh2.png" alt="Brag House — 2"></div>
+          <div class="entry__img-wrap" data-lb><img src="Images/bh3.png" alt="Brag House — 3"></div>
         </div>
       </div>
     </article>
@@ -601,9 +616,8 @@
           <p>Designed a HR service from scratch for «SberMarket». The company has over 17,000 employees and contractors in 165 cities and has delivered over 8M orders to date</p>
         </div>
         <div class="entry__images">
-          <div class="entry__img-wrap" data-lb><img src="" alt="SberMarket — 1"></div>
-          <div class="entry__img-wrap" data-lb><img src="" alt="SberMarket — 2"></div>
-          <div class="entry__img-wrap" data-lb><img src="" alt="SberMarket — 3"></div>
+          <div class="entry__img-wrap" data-lb><img src="Images/sbrhrms1.png" alt="SberMarket — 1"></div>
+          <div class="entry__img-wrap" data-lb><img src="Images/sbrhrms2.png" alt="SberMarket — 2"></div>
         </div>
       </div>
     </article>
@@ -633,6 +647,11 @@
         <div class="entry__desc">
           <p>Designed a recognition and generation tool based on neural networks, that Miro presented in 2023 called Miro AI</p>
         </div>
+        <div class="entry__images">
+          <div class="entry__img-wrap" data-lb><img src="Images/miro1.png" alt="Miro — 1"></div>
+          <div class="entry__img-wrap" data-lb><img src="Images/miro2.png" alt="Miro — 2"></div>
+          <div class="entry__img-wrap" data-lb><img src="Images/miro3.png" alt="Miro — 3"></div>
+        </div>
       </div>
     </article>
 
@@ -661,18 +680,20 @@
     <div class="lb-stage" id="lbStage">
       <img class="lb-img" id="lbImg" src="" alt="">
       <div class="lb-empty" id="lbEmpty">
-        Add project screenshots to see them here.<br>
-        Replace <code>src=""</code> in the HTML with your image path.
+        Add project screenshots to see them here.
       </div>
     </div>
     <button class="lb-nav lb-next" id="lbNext" aria-label="Next">&#8250;</button>
-    <span class="lb-counter" id="lbCounter"></span>
+    <!-- Thumbnail carousel (replaces text counter) -->
+    <div class="lb-carousel-wrap">
+      <div class="lb-carousel" id="lbCarousel"></div>
+    </div>
   </div>
 
   <script>
     'use strict';
 
-    /* ── Email copy ─────────────────────────────── */
+    /* ── Email copy ───────────────────────── */
     document.getElementById('emailBtn').addEventListener('click', function () {
       var email = 'elizabethulianova@gmail.com';
       function showToast() {
@@ -695,14 +716,12 @@
       }
     });
 
-    /* ── Lightbox ───────────────────────────────── */
-    /* Collect all [data-lb] items — includes hidden ones (for nav) */
-    var lbItems   = Array.from(document.querySelectorAll('[data-lb]'));
-    var lbIndex   = 0;
-    var lightbox  = document.getElementById('lightbox');
-    var lbImg     = document.getElementById('lbImg');
-    var lbEmpty   = document.getElementById('lbEmpty');
-    var lbCounter = document.getElementById('lbCounter');
+    /* ── Lightbox core ────────────────────── */
+    var lbItems  = Array.from(document.querySelectorAll('[data-lb]'));
+    var lbIndex  = 0;
+    var lightbox = document.getElementById('lightbox');
+    var lbImg    = document.getElementById('lbImg');
+    var lbEmpty  = document.getElementById('lbEmpty');
 
     function getRawSrc(item) {
       var img = item.querySelector('img');
@@ -716,11 +735,10 @@
     }
 
     function renderLb() {
-      var item = lbItems[lbIndex];
-      var src  = getRawSrc(item);
+      var src = getRawSrc(lbItems[lbIndex]);
       if (src) {
         lbImg.src = src;
-        lbImg.alt = getAlt(item);
+        lbImg.alt = getAlt(lbItems[lbIndex]);
         lbImg.style.display   = 'block';
         lbEmpty.style.display = 'none';
       } else {
@@ -728,7 +746,7 @@
         lbImg.style.display   = 'none';
         lbEmpty.style.display = 'flex';
       }
-      lbCounter.textContent = (lbIndex + 1) + ' / ' + lbItems.length;
+      updateCarousel();
     }
 
     function openLb(i) {
@@ -737,38 +755,101 @@
       lightbox.classList.add('open');
       document.getElementById('lbClose').focus();
     }
-    function closeLb()  { lightbox.classList.remove('open'); }
-    function prevLb()   { lbIndex = (lbIndex - 1 + lbItems.length) % lbItems.length; renderLb(); }
-    function nextLb()   { lbIndex = (lbIndex + 1) % lbItems.length; renderLb(); }
+    function closeLb() { lightbox.classList.remove('open'); }
+    function prevLb()  { lbIndex = (lbIndex - 1 + lbItems.length) % lbItems.length; renderLb(); }
+    function nextLb()  { lbIndex = (lbIndex + 1) % lbItems.length; renderLb(); }
 
-    /* Visible image wrappers → click opens lightbox at their index */
+    /* Open on thumbnail click */
     lbItems.forEach(function (item, i) {
       item.addEventListener('click', function () { openLb(i); });
     });
-
-    /* "+N" buttons → open lightbox at the first hidden sibling */
+    /* "+N" button opens lightbox at first hidden sibling */
     document.querySelectorAll('[data-lb-more]').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        var hiddenSibling = btn.parentElement
-          .querySelector('.entry__img-wrap--hidden[data-lb]');
-        if (hiddenSibling) {
-          openLb(lbItems.indexOf(hiddenSibling));
-        }
+        var h = btn.parentElement.querySelector('.entry__img-wrap--hidden[data-lb]');
+        if (h) openLb(lbItems.indexOf(h));
       });
     });
 
     document.getElementById('lbClose').addEventListener('click', closeLb);
     document.getElementById('lbPrev').addEventListener('click', prevLb);
     document.getElementById('lbNext').addEventListener('click', nextLb);
-    lightbox.addEventListener('click', function (e) {
-      if (e.target === lightbox) closeLb();
-    });
+    lightbox.addEventListener('click', function (e) { if (e.target === lightbox) closeLb(); });
     document.addEventListener('keydown', function (e) {
       if (!lightbox.classList.contains('open')) return;
       if (e.key === 'Escape')     closeLb();
       if (e.key === 'ArrowLeft')  prevLb();
       if (e.key === 'ArrowRight') nextLb();
     });
+
+    /* ── Thumbnail carousel ───────────────── */
+    var carousel = document.getElementById('lbCarousel');
+
+    function buildCarousel() {
+      carousel.innerHTML = '';
+      lbItems.forEach(function (item, i) {
+        var src   = getRawSrc(item);
+        var thumb = document.createElement('div');
+        thumb.className = 'lb-thumb';
+        if (src) {
+          var img = document.createElement('img');
+          img.src = src;
+          img.alt = getAlt(item);
+          img.draggable = false;
+          thumb.appendChild(img);
+        } else {
+          thumb.classList.add('lb-thumb--empty');
+        }
+        thumb.addEventListener('click', function () { lbIndex = i; renderLb(); });
+        carousel.appendChild(thumb);
+      });
+    }
+
+    function updateCarousel() {
+      var thumbs = Array.from(carousel.querySelectorAll('.lb-thumb'));
+      thumbs.forEach(function (t, i) {
+        t.classList.toggle('lb-thumb--active', i === lbIndex);
+      });
+
+      var active = thumbs[lbIndex];
+      if (!active) return;
+
+      /* Translate the strip so the active thumb center aligns with the
+         horizontal center of .lb-carousel-wrap */
+      var wrap       = carousel.parentElement;   /* .lb-carousel-wrap */
+      var wrapCenter = wrap.offsetWidth / 2;
+      /* active.offsetLeft is relative to carousel (position:relative) */
+      var thumbCenter = active.offsetLeft + active.offsetWidth / 2;
+      carousel.style.transform = 'translateX(' + (wrapCenter - thumbCenter) + 'px)';
+    }
+
+    buildCarousel();
+
+    /* ── First-entry line: align top to dot ── */
+    function fixFirstEntryLine() {
+      var firstEntry = document.querySelector('.scroll-wrap > article:first-of-type');
+      var firstDot   = firstEntry && firstEntry.querySelector('.entry__dot');
+      if (!firstEntry || !firstDot) return;
+
+      /* Sum offsetTop through the offsetParent chain up to .scroll-wrap */
+      var scrollWrap = document.querySelector('.scroll-wrap');
+      function topRelativeTo(el, ancestor) {
+        var top = 0;
+        while (el && el !== ancestor) { top += el.offsetTop; el = el.offsetParent; }
+        return top;
+      }
+
+      var entryTop  = topRelativeTo(firstEntry, scrollWrap);
+      var dotTop    = topRelativeTo(firstDot,   scrollWrap);
+      var dotCenter = dotTop - entryTop + firstDot.offsetHeight / 2;
+
+      firstEntry.style.setProperty('--line-top', dotCenter + 'px');
+    }
+
+    /* Run after fonts settle so line-heights are final */
+    (document.fonts ? document.fonts.ready : Promise.resolve())
+      .then(fixFirstEntryLine);
+    window.addEventListener('resize', fixFirstEntryLine);
   </script>
 </body>
 </html>
