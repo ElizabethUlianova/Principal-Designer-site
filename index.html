@@ -256,10 +256,28 @@
     }
     .entry__desc p + p { margin-top: 10px; }
 
-    /* Col 3, Row 4: images */
-    .entry__images {
+    /* Col 3, Row 4: "read more" link (optional) */
+    .entry__more {
       grid-column: 3;
       grid-row: 4;
+      align-self: start;
+      margin-top: 12px;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--mid);
+      text-decoration: none;
+      letter-spacing: 0.01em;
+      transition: color 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .entry__more:hover { color: var(--dark); }
+
+    /* Col 3, Row 5: images */
+    .entry__images {
+      grid-column: 3;
+      grid-row: 5;
       display: flex;
       gap: 10px;
       margin-top: 22px;
@@ -524,6 +542,7 @@
         <div class="entry__desc">
           <p>Formed from scratch a unified vision of the marketplace product. Assembled a loyal team of 12 designers. Implemented and optimized design processes for faster, high-quality execution, aligning with business goals. All this increased the purchase conversion in the fashion, beauty, FMCG, and home goods categories by 4 times and increased total GMV by 5%, to $358 million per year</p>
         </div>
+        <a class="entry__more" href="megamarket.html">read more ➡️</a>
         <div class="entry__images">
           <div class="entry__img-wrap" data-lb>
             <img src="Images/megamarket1.png" alt="Megamarket — 1">

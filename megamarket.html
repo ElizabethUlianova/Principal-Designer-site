@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Megamarket — Principal Product Design. End-to-end design process by Lisa Ulianova.">
+  <title>Megamarket — Lisa Ulianova</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --dark:    #191B29;
+      --mid:     #75767F;
+      --light:   #A3A4AA;
+      --surface: #F2F2F5;
+      --line:    #E8E8EA;
+      --white:   #FFFFFF;
+      --max-w:   720px;
+      --ph:      40px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--white);
+      color: var(--dark);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* ── Nav ── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav__inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 18px var(--ph);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav__back {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--mid);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.15s;
+    }
+    .nav__back:hover { color: var(--dark); }
+
+    .nav__title {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--light);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* ── Layout ── */
+    .content {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--ph);
+    }
+
+    /* ── Project hero ── */
+    .project-hero {
+      padding: 72px 0 64px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .project-company {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--light);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .project-title {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 700;
+      color: var(--dark);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 14px;
+    }
+
+    .project-subtitle {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--mid);
+      margin-bottom: 32px;
+    }
+
+    .project-meta {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .project-meta__item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .project-meta__label {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--light);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .project-meta__value {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--dark);
+    }
+
+    /* ── Sections ── */
+    .section {
+      padding: 64px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .section:last-child { border-bottom: none; }
+
+    .section-tag {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--light);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .section-heading {
+      font-size: clamp(20px, 2.4vw, 26px);
+      font-weight: 700;
+      color: var(--dark);
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+
+    .section-heading--sub {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--dark);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      margin-bottom: 12px;
+      margin-top: 32px;
+    }
+    .section-heading--sub:first-child { margin-top: 0; }
+
+    .section-body {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--mid);
+      line-height: 1.8;
+    }
+    .section-body p + p { margin-top: 14px; }
+
+    /* ── Steps list (01–07) ── */
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 24px;
+      padding: 24px;
+      background: var(--surface);
+      border-radius: 12px;
+    }
+
+    .steps-list__item {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      font-size: 14px;
+    }
+
+    .steps-list__num {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--light);
+      letter-spacing: 0.06em;
+      min-width: 22px;
+    }
+
+    .steps-list__label {
+      font-weight: 400;
+      color: var(--dark);
+    }
+
+    /* ── Outcome box ── */
+    .outcome-label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--light);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+      width: 100%;
+    }
+
+    /* ── Behavior pattern ── */
+    .pattern {
+      margin-bottom: 22px;
+    }
+    .pattern:last-child { margin-bottom: 0; }
+
+    .pattern__title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+
+    .pattern__flow {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--mid);
+      line-height: 1.7;
+    }
+
+    /* ── Bullet list ── */
+    .bullet-group {
+      margin-bottom: 24px;
+    }
+    .bullet-group:last-child { margin-bottom: 0; }
+
+    .bullet-group__label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+
+    .bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .bullet-list li {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--mid);
+      line-height: 1.7;
+      padding-left: 16px;
+      position: relative;
+    }
+    .bullet-list li::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: var(--light);
+    }
+
+    /* ── Image ── */
+    .project-img {
+      width: 100%;
+      border-radius: 12px;
+      display: block;
+      background: var(--surface);
+      margin: 32px 0;
+    }
+    .project-img img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 12px;
+    }
+
+    /* ── Metrics row ── */
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 28px;
+    }
+
+    .metric {
+      background: var(--surface);
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .metric__value {
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: var(--dark);
+      letter-spacing: -0.03em;
+    }
+
+    .metric__label {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--light);
+      line-height: 1.4;
+    }
+
+    /* ── Thanks ── */
+    .thanks {
+      padding: 80px 0 100px;
+      text-align: center;
+    }
+
+    .thanks__heading {
+      font-size: clamp(20px, 2.8vw, 28px);
+      font-weight: 700;
+      color: var(--dark);
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .thanks__body {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--mid);
+      line-height: 1.75;
+      max-width: 500px;
+      margin: 0 auto 36px;
+    }
+
+    .thanks__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--dark);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      padding: 12px 24px;
+      border-radius: 100px;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .thanks__cta:hover { border-color: var(--dark); }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      :root { --ph: 20px; }
+      .metrics { grid-template-columns: 1fr; }
+      .project-hero { padding: 48px 0 48px; }
+      .section { padding: 48px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Nav ── -->
+  <nav class="nav">
+    <div class="nav__inner">
+      <a class="nav__back" href="index.html">← back</a>
+      <span class="nav__title">Lisa Ulianova</span>
+    </div>
+  </nav>
+
+  <!-- ── Project hero ── -->
+  <div class="content">
+    <header class="project-hero">
+      <p class="project-company">Megamarket</p>
+      <h1 class="project-title">Principal Product Design</h1>
+      <p class="project-subtitle">End-to-end design process</p>
+      <div class="project-meta">
+        <div class="project-meta__item">
+          <span class="project-meta__label">Period</span>
+          <span class="project-meta__value">09/2023 — 12/2024</span>
+        </div>
+        <div class="project-meta__item">
+          <span class="project-meta__label">Duration</span>
+          <span class="project-meta__value">1 year 3 months</span>
+        </div>
+        <div class="project-meta__item">
+          <span class="project-meta__label">Role</span>
+          <span class="project-meta__value">Principal Product Design</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ── Situation ── -->
+    <section class="section">
+      <p class="section-tag">Situation</p>
+      <h2 class="section-heading">The problem to solve</h2>
+      <div class="section-body">
+        <p>The marketplace had been grown fast by attracting users for high cashbacks and discounts, but UI was outdated and UX was too generic. It didn't reflect the specifics of different categories like fashion, beauty, FMCG, etc, which made it hard to scale and it affected conversion.</p>
+      </div>
+
+      <div class="project-img">
+        <img src="Images/megamarket1.png" alt="Megamarket — situation">
+      </div>
+    </section>
+
+    <!-- ── Task ── -->
+    <section class="section">
+      <p class="section-tag">Task</p>
+      <h2 class="section-heading">Build a consistent, flexible system</h2>
+      <div class="section-body">
+        <p>My task was to build a consistent and the same time flexible system — something scalable, but still unique for each category. It wasn't just about visuals — it was a <strong style="color:var(--dark);font-weight:600">full rethinking of how customers interact with the marketplace.</strong></p>
+      </div>
+
+      <div class="steps-list">
+        <div class="steps-list__item"><span class="steps-list__num">01</span><span class="steps-list__label">Visual language</span></div>
+        <div class="steps-list__item"><span class="steps-list__num">02</span><span class="steps-list__label">Design principles</span></div>
+        <div class="steps-list__item"><span class="steps-list__num">03</span><span class="steps-list__label">User behavior</span></div>
+        <div class="steps-list__item"><span class="steps-list__num">04</span><span class="steps-list__label">Bunch of ideas</span></div>
+        <div class="steps-list__item"><span class="steps-list__num">05</span><span class="steps-list__label">First concepts</span></div>
+        <div class="steps-list__item"><span class="steps-list__num">06</span><span class="steps-list__label">Basic flow</span></div>
+        <div class="steps-list__item"><span class="steps-list__num">07</span><span class="steps-list__label">Scaled solutions</span></div>
+      </div>
+    </section>
+
+    <!-- ── 01 Visual Language ── -->
+    <section class="section">
+      <p class="section-tag">Action 01</p>
+      <h2 class="section-heading">Visual Language</h2>
+      <div class="section-body">
+        <p>The first step was to collect inspiring products in terms of user interface, communication, and positioning, explaining exactly what I liked and wanted to use as a basis for the visual language and design principles of our new marketplace.</p>
+      </div>
+
+      <div class="project-img">
+        <img src="Images/megamarket2.png" alt="Megamarket — visual language">
+      </div>
+
+      <span class="outcome-label">01 Visual Language / outcome</span>
+
+      <h3 class="section-heading--sub">Vibe "we are on the same wavelength"</h3>
+      <div class="section-body">
+        <p>Create your own atmosphere where you can feel "yourself/calm/safe", so that you spend an endless amount of time (and spend your money).</p>
+      </div>
+
+      <h3 class="section-heading--sub">Balance consistency and product diversity</h3>
+      <div class="section-body">
+        <p>Completely remove all the "dirt" on the marketplaces — no freedom for sellers. We create a tool — seller puts their product in the tool and it automatically adjusts to our guides.</p>
+      </div>
+
+      <h3 class="section-heading--sub">More spaciousness</h3>
+      <div class="section-body">
+        <p>3D models, marking in space/in a photo, without borders/frames, seamless interactive, AR. So that you can get stuck in a separate full-fledged world (and spend your money).</p>
+      </div>
+    </section>
+
+    <!-- ── 02 Design Principles ── -->
+    <section class="section">
+      <p class="section-tag">Action 02</p>
+      <h2 class="section-heading">Design Principles</h2>
+      <div class="section-body">
+        <p>After searching for a visual language, I moved on to defining design principles to determine what would set us apart from competitors in our niche and what our value would be to the user. Together with the design director and the main product owner, I conducted a workshop, as a result of which we determined the basic principles and values of our future product.</p>
+      </div>
+
+      <div class="project-img">
+        <img src="Images/megamarket3.png" alt="Megamarket — design principles">
+      </div>
+
+      <span class="outcome-label">02 Design Principles / outcome</span>
+
+      <div class="bullet-group">
+        <p class="bullet-group__label">Clear design for easy achievement of goals</p>
+        <p class="section-tag" style="margin-bottom:8px">As a user:</p>
+        <ul class="bullet-list">
+          <li>I must clearly understand how to quickly and simply complete my task: place an order or achieve any other goal</li>
+          <li>I always understand what I see and what is happening, I don't need to look for hidden meanings</li>
+          <li>It's easy for me to make a decision, my choice is obvious and I expect that the product is ready to help me with this</li>
+        </ul>
+        <p class="section-tag" style="margin-top:14px;margin-bottom:8px">Our design:</p>
+        <ul class="bullet-list">
+          <li>Contains only those elements that help achieve the goal, it is accessible and understandable to use</li>
+          <li>Is unambiguous, all the elements have only one meaning, they cannot be interpreted in different ways</li>
+          <li>Helps to make the choice simple, we show only what the user needs and is interested in, we present the content as honestly and in detail as possible</li>
+        </ul>
+      </div>
+
+      <div class="bullet-group">
+        <p class="bullet-group__label">Boldness solutions for user experience</p>
+        <p class="section-tag" style="margin-bottom:8px">As a user:</p>
+        <ul class="bullet-list">
+          <li>I trust the non-standard solutions that the product offers me and expect that I will have no barriers to use</li>
+          <li>I want to get new emotions from interacting with the service, and that's why I choose it</li>
+          <li>I see non-standard solutions and want to share the experience of using them with others</li>
+        </ul>
+        <p class="section-tag" style="margin-top:14px;margin-bottom:8px">Our design:</p>
+        <ul class="bullet-list">
+          <li>Is decisive, we offer bold ideas that are not yet on the market, and we are not afraid of this</li>
+          <li>Is inspired not only by digital, but also by the surrounding physical world</li>
+          <li>Has been transformed from crazy ideas into practical cases</li>
+        </ul>
+      </div>
+
+      <div class="bullet-group">
+        <p class="bullet-group__label">Friendly &amp; helpful</p>
+        <p class="section-tag" style="margin-bottom:8px">As a user:</p>
+        <ul class="bullet-list">
+          <li>I trust this service, because not only are the best solutions and prices here, but they are also honest &amp; I will not be deceived here</li>
+          <li>I know that this service knows better than me what is really suitable for me</li>
+          <li>I can collect all my desires and goals here. This is my wish dashboard</li>
+        </ul>
+        <p class="section-tag" style="margin-top:14px;margin-bottom:8px">Our design:</p>
+        <ul class="bullet-list">
+          <li>Uses elements and technologies that help the user along his way to achieve the goal</li>
+          <li>Makes it easy for the user to make a choice</li>
+          <li>Is endearing and friendly which you can trust</li>
+        </ul>
+      </div>
+
+      <div class="bullet-group">
+        <p class="bullet-group__label">Unified experience &amp; consistent design</p>
+        <p class="section-tag" style="margin-bottom:8px">As a user:</p>
+        <ul class="bullet-list">
+          <li>I always know how to use functionality, even if it's a different interaction, the experience retains consistency and continuity</li>
+          <li>I always recognize the service at any point of interaction with it</li>
+        </ul>
+        <p class="section-tag" style="margin-top:14px;margin-bottom:8px">Our design:</p>
+        <ul class="bullet-list">
+          <li>Is consistent from the point of view of experience and visual, even if we are doing something new, we remember that it is part of the overall picture</li>
+          <li>Principles are at the top of every decision</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── 03 User Behavior ── -->
+    <section class="section">
+      <p class="section-tag">Action 03</p>
+      <h2 class="section-heading">User Behavior</h2>
+      <div class="section-body">
+        <p>My next step was to understand the patterns behind how people actually shop — why and when they decide to buy, and how they search for the products they're ready to purchase. I ran surveys with users who had made different types of purchases in the past week, and from that I identified 4 core behavior patterns.</p>
+      </div>
+
+      <div class="project-img">
+        <img src="Images/megamarket4.png" alt="Megamarket — user behavior">
+      </div>
+
+      <span class="outcome-label">03 User Behavior / outcome</span>
+
+      <div class="pattern">
+        <p class="pattern__title">Spontaneous purchase</p>
+        <p class="pattern__flow">have money → see something → 😍 fall in love → buy it</p>
+      </div>
+      <div class="pattern">
+        <p class="pattern__title">Subconscious need</p>
+        <p class="pattern__flow">watching/reading/interested in a random topic → 😀 come across something → choose the best option → buy it</p>
+      </div>
+      <div class="pattern">
+        <p class="pattern__title">A conscious need</p>
+        <p class="pattern__flow">problem needs to be solved → reading/asking/looking for a solution → 🔱 find a perfect solution → choose the best option → buy it</p>
+      </div>
+      <div class="pattern">
+        <p class="pattern__title">Specific purchase</p>
+        <p class="pattern__flow">know exactly what I want → watching/reading/asking about the ideal option → 🛽 choosing the best offer → buy it</p>
+      </div>
+    </section>
+
+    <!-- ── 04 Bunch of Ideas ── -->
+    <section class="section">
+      <p class="section-tag">Action 04</p>
+      <h2 class="section-heading">Bunch of Ideas</h2>
+      <div class="section-body">
+        <p>Using these four main shopping scenarios as a foundation, I started shaping the functionality a marketplace should have and how it could help users make a purchase, no matter how clear or formed their need was.</p>
+      </div>
+
+      <div class="project-img">
+        <img src="Images/megamarket5.png" alt="Megamarket — ideas">
+      </div>
+
+      <span class="outcome-label">04 Bunch of Ideas / outcome</span>
+
+      <div class="section-body">
+        <p>As a result, I generated more than 45 ideas for what a marketplace could look like, each with its problem statement and contextual use case. These ranged from straightforward concepts like an AI-powered search assistant to more unconventional directions — for example, a turnkey digital replica of your home with items organized by real-life categories.</p>
+      </div>
+    </section>
+
+    <!-- ── 05 First Concepts ── -->
+    <section class="section">
+      <p class="section-tag">Action 05</p>
+      <h2 class="section-heading">First Concepts</h2>
+      <div class="section-body">
+        <p>Of course, no one needs to implement all the ideas at once. It was necessary to determine the core idea and functionality, so I grouped all the ideas according to the main messages.</p>
+      </div>
+
+      <span class="outcome-label" style="margin-top:32px">05 First Concepts / outcome</span>
+
+      <div class="section-body">
+        <p>Overall, I came up with 9 complete concepts. One was the minimum viable version — the core fixes we needed to implement first, without any bells and whistles — and the other 8 explored various possible directions for the marketplace.</p>
+      </div>
+    </section>
+
+    <!-- ── 06 Basic Flow ── -->
+    <section class="section">
+      <p class="section-tag">Action 06</p>
+      <h2 class="section-heading">Basic Flow</h2>
+      <div class="section-body">
+        <p>After aligning the core flow with the main stakeholders, I joined the product teams across the entire funnel — from the homepage to post-checkout — to start implementing the concept together with the designers in each team.</p>
+      </div>
+
+      <div class="project-img">
+        <img src="Images/megamarket6.png" alt="Megamarket — basic flow">
+      </div>
+
+      <span class="outcome-label">06 Basic Flow / outcome</span>
+
+      <div class="section-body">
+        <p>Every piece of the product has been updated not only based on the concept, but also taking into account research, metrics, and progressive A/B testing. This eventually led to significant results across the entire funnel.</p>
+      </div>
+
+      <div class="metrics">
+        <div class="metric">
+          <span class="metric__value">$358M</span>
+          <span class="metric__label">GMV per year</span>
+        </div>
+        <div class="metric">
+          <span class="metric__value">+12%</span>
+          <span class="metric__label">add-to-cart rate</span>
+        </div>
+        <div class="metric">
+          <span class="metric__value">+9%</span>
+          <span class="metric__label">checkout conversion</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 07 Scaled Solutions ── -->
+    <section class="section">
+      <p class="section-tag">Action 07</p>
+      <h2 class="section-heading">Scaled Solutions</h2>
+      <div class="section-body">
+        <p>At the same time, while the core flow was being transformed, I continued developing additional concepts that would enhance the user experience, taking into account the specific needs and behaviors of each category.</p>
+      </div>
+
+      <div class="project-img">
+        <img src="Images/megamarket7.png" alt="Megamarket — scaled solutions">
+      </div>
+    </section>
+
+    <!-- ── Thanks ── -->
+    <section class="thanks">
+      <h2 class="thanks__heading">Thanks for watching</h2>
+      <p class="thanks__body">If you'd like to dive deeper into how I approach a single feature — from identifying the problem to researching, ideating, and validating the final solution — I'd be glad to share a detailed example in our next meeting.</p>
+      <a class="thanks__cta" href="index.html">← back to timeline</a>
+    </section>
+  </div>
+
+</body>
+</html>
