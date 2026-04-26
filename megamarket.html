@@ -18,8 +18,8 @@
       --surface: #F2F2F5;
       --line:    #E8E8EA;
       --white:   #FFFFFF;
-      --max-w:   1080px;
-      --ph:      80px;
+      --max-w:   920px;
+      --ph:      40px;
     }
 
     html { scroll-behavior: smooth; }
@@ -171,13 +171,12 @@
 
     /* ── Outcome heading ── */
     .outcome-label {
-      display: block;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--light);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 24px;
+      font-size: clamp(20px, 2.4vw, 26px);
+      font-weight: 700;
+      color: var(--dark);
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
     }
 
     /* ── Steps list (01–07) ── */
