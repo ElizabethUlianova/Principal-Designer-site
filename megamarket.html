@@ -275,6 +275,8 @@
       line-height: 1.25;
       letter-spacing: -0.02em;
       margin-bottom: 12px;
+      height: 2.5em;        /* fixed 2-line height so body text aligns across columns */
+      overflow: hidden;
     }
 
     .vl-col__body {
@@ -296,6 +298,8 @@
       padding-left: max(var(--ph), calc(50vw - var(--max-w) / 2 + var(--ph)));
       /* Padding-right: content right edge, so last card doesn't flush to edge */
       padding-right: max(var(--ph), calc(50vw - var(--max-w) / 2 + var(--ph)));
+      /* scroll-padding-left ensures snap points align cards with content left edge */
+      scroll-padding-left: max(var(--ph), calc(50vw - var(--max-w) / 2 + var(--ph)));
 
       /* Scroll + snap */
       display: flex;
@@ -378,6 +382,7 @@
 
     .behavior-card {
       padding: 28px 24px;
+      min-height: 224px;
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -415,6 +420,11 @@
       margin: 32px 0;
     }
     .project-img--transparent { background: transparent; }
+    /* 40% wider than the content container — overhangs equally on both sides */
+    .project-img--wide {
+      width: 140%;
+      margin-left: -20%;
+    }
     .project-img img {
       width: 100%;
       height: auto;
@@ -438,6 +448,8 @@
       padding: 24px 20px;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      text-align: center;
       gap: 6px;
     }
 
@@ -612,7 +624,7 @@
         <p>The first step was to collect inspiring products in terms of user interface, communication, and positioning, explaining exactly what I liked and wanted to use as a basis for the visual language and design principles of our new marketplace.</p>
       </div>
 
-      <div class="project-img">
+      <div class="project-img project-img--wide">
         <img src="Images/Visual_Language.png" alt="Megamarket — visual language">
       </div>
 
