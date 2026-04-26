@@ -265,7 +265,7 @@
 
     .vl-col {
       background: var(--surface);
-      padding: 24px 22px;
+      padding: 32px 22px;   /* +30% vertical padding (24 → 32px) */
       border-radius: 12px;   /* each column is its own card */
     }
 
@@ -281,7 +281,7 @@
     }
 
     .vl-col__body {
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 400;
       color: var(--mid);
       line-height: 1.7;
@@ -311,9 +311,12 @@
       scrollbar-width: none;
       -ms-overflow-style: none;
 
-      padding-top: 2px;
+      padding-top: 20px;   /* 20px gap from Outcome heading above */
       padding-bottom: 8px;
     }
+
+    /* Remove section-02 bottom padding so the gap is purely the 20px padding-top above */
+    #section-02 { padding-bottom: 0; }
     .principles-scroll::-webkit-scrollbar { display: none; }
 
     .principle-card {
@@ -658,7 +661,7 @@
         <img src="Images/Design Principles.png" alt="Megamarket — design principles">
       </div>
 
-      <h2 class="outcome-label">Outcome</h2>
+      <h2 class="outcome-label" style="margin-bottom:0">Outcome</h2>
     </section>
   </div><!-- /content — break for full-bleed scroll -->
 
@@ -772,7 +775,7 @@
       <div class="behavior-grid">
         <div class="behavior-card behavior-card--a">
           <p class="behavior-card__title">Spontaneous purchase</p>
-          <p class="behavior-card__flow">have money → see something → <br>🖤 fall in love → buy it</p>
+          <p class="behavior-card__flow">have money → see something →🖤 fall in love → buy it</p>
         </div>
         <div class="behavior-card behavior-card--b">
           <p class="behavior-card__title">Subconscious need</p>
@@ -836,7 +839,12 @@
       </div>
 
       <div class="project-img">
-        <img src="Images/megamarket6.png" alt="Megamarket — basic flow">
+        <video
+          src="Screencast.mp4"
+          autoplay muted loop playsinline controls
+          style="width:100%;height:auto;display:block;border-radius:12px;"
+          aria-label="Megamarket — basic flow screencast">
+        </video>
       </div>
 
       <h2 class="outcome-label">Outcome</h2>

@@ -51,7 +51,7 @@
     }
 
     .site-header__inner {
-      max-width: var(--max-w);
+      max-width: 920px;   /* matches megamarket page header width */
       margin: 0 auto;
       padding: 22px var(--ph);
       display: flex;
@@ -446,6 +446,21 @@
     }
     .lb-thumb:hover:not(.lb-thumb--active) { opacity: 0.6; }
 
+    /* ── Lightbox caption ── */
+    .lb-caption {
+      position: absolute;
+      bottom: 96px;          /* sits just above the carousel strip */
+      left: 0; right: 0;
+      text-align: center;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.04em;
+      pointer-events: none;
+      transition: opacity 0.18s;
+    }
+
     /* ═══════════════════════════════════════
        RESPONSIVE
     ═══════════════════════════════════════ */
@@ -566,7 +581,7 @@
           </div>
           <div class="entry__img-more" data-lb-more>+4</div>
         </div>
-        <a class="entry__more" href="megamarket.html">read more →</a>
+        <a class="entry__more" href="megamarket.html">📖 Read how I was rethinking the entire marketplace →</a>
       </div>
     </article>
 
@@ -703,6 +718,8 @@
       </div>
     </div>
     <button class="lb-nav lb-next" id="lbNext" aria-label="Next">&#8250;</button>
+    <!-- Project caption -->
+    <p class="lb-caption" id="lbCaption"></p>
     <!-- Thumbnail carousel (replaces text counter) -->
     <div class="lb-carousel-wrap">
       <div class="lb-carousel" id="lbCarousel"></div>
@@ -736,11 +753,12 @@
     });
 
     /* ── Lightbox core ────────────────────── */
-    var lbItems  = Array.from(document.querySelectorAll('[data-lb]'));
-    var lbIndex  = 0;
-    var lightbox = document.getElementById('lightbox');
-    var lbImg    = document.getElementById('lbImg');
-    var lbEmpty  = document.getElementById('lbEmpty');
+    var lbItems   = Array.from(document.querySelectorAll('[data-lb]'));
+    var lbIndex   = 0;
+    var lightbox  = document.getElementById('lightbox');
+    var lbImg     = document.getElementById('lbImg');
+    var lbEmpty   = document.getElementById('lbEmpty');
+    var lbCaption = document.getElementById('lbCaption');
 
     function getRawSrc(item) {
       var img = item.querySelector('img');
@@ -755,9 +773,10 @@
 
     function renderLb() {
       var src = getRawSrc(lbItems[lbIndex]);
+      var alt = getAlt(lbItems[lbIndex]);
       if (src) {
         lbImg.src = src;
-        lbImg.alt = getAlt(lbItems[lbIndex]);
+        lbImg.alt = alt;
         lbImg.style.display   = 'block';
         lbEmpty.style.display = 'none';
       } else {
@@ -765,6 +784,9 @@
         lbImg.style.display   = 'none';
         lbEmpty.style.display = 'flex';
       }
+      /* Caption: project name is the part before ' — ' in the alt text */
+      var project = alt.indexOf(' — ') !== -1 ? alt.split(' — ')[0] : alt;
+      lbCaption.textContent = project;
       updateCarousel();
     }
 
