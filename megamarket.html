@@ -212,9 +212,9 @@
       color: var(--dark);
     }
 
-    /* ── Outcome box ── */
+    /* ── Outcome label ── */
     .outcome-label {
-      display: inline-block;
+      display: block;
       font-size: 11px;
       font-weight: 600;
       color: var(--light);
@@ -226,52 +226,100 @@
       width: 100%;
     }
 
-    /* ── Behavior pattern ── */
-    .pattern {
-      margin-bottom: 22px;
+    /* ── 01 Visual Language: 3-column grid ── */
+    .vl-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border-radius: 12px;
+      overflow: hidden;
     }
-    .pattern:last-child { margin-bottom: 0; }
 
-    .pattern__title {
+    .vl-col {
+      background: var(--surface);
+      padding: 22px 20px;
+    }
+
+    .vl-col__title {
       font-size: 14px;
       font-weight: 600;
       color: var(--dark);
-      margin-bottom: 4px;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+      margin-bottom: 10px;
     }
 
-    .pattern__flow {
-      font-size: 14px;
+    .vl-col__body {
+      font-size: 13px;
       font-weight: 400;
       color: var(--mid);
       line-height: 1.7;
     }
 
-    /* ── Bullet list ── */
-    .bullet-group {
-      margin-bottom: 24px;
+    /* ── 02 Design Principles: horizontal scroll cards ── */
+    .principles-scroll {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      /* bleed past content padding so card edges are visible */
+      margin-left:  calc(-1 * var(--ph));
+      margin-right: calc(-1 * var(--ph));
+      padding-left:  var(--ph);
+      padding-right: var(--ph);
+      padding-bottom: 4px;
     }
-    .bullet-group:last-child { margin-bottom: 0; }
+    .principles-scroll::-webkit-scrollbar { display: none; }
 
-    .bullet-group__label {
-      font-size: 13px;
+    .principle-card {
+      flex-shrink: 0;
+      width: min(540px, 80vw);
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .principle-card__title {
+      font-size: 15px;
       font-weight: 600;
       color: var(--dark);
-      margin-bottom: 8px;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      margin-bottom: 18px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .principle-card__cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .principle-card__col-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--light);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
     }
 
     .bullet-list {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 7px;
     }
 
     .bullet-list li {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 400;
       color: var(--mid);
-      line-height: 1.7;
-      padding-left: 16px;
+      line-height: 1.6;
+      padding-left: 14px;
       position: relative;
     }
     .bullet-list li::before {
@@ -280,6 +328,33 @@
       left: 0;
       color: var(--light);
     }
+
+    /* ── 03 User Behavior: 2×2 card grid ── */
+    .behavior-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .behavior-card {
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* top-left + bottom-right: dark */
+    .behavior-card--a { background: var(--dark); }
+    .behavior-card--a .behavior-card__title { color: var(--white); font-size: 15px; font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; }
+    .behavior-card--a .behavior-card__flow  { color: rgba(255,255,255,0.45); font-size: 13px; font-weight: 400; line-height: 1.7; }
+
+    /* top-right + bottom-left: light */
+    .behavior-card--b { background: var(--surface); }
+    .behavior-card--b .behavior-card__title { color: var(--dark); font-size: 15px; font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; }
+    .behavior-card--b .behavior-card__flow  { color: var(--mid); font-size: 13px; font-weight: 400; line-height: 1.7; }
 
     /* ── Image ── */
     .project-img {
@@ -374,6 +449,9 @@
       .metrics { grid-template-columns: 1fr; }
       .project-hero { padding: 48px 0 48px; }
       .section { padding: 48px 0; }
+      .vl-grid { grid-template-columns: 1fr; }
+      .behavior-grid { grid-template-columns: 1fr; }
+      .principle-card__cols { grid-template-columns: 1fr; gap: 16px; }
     }
   </style>
 </head>
@@ -455,19 +533,19 @@
 
       <span class="outcome-label">01 Visual Language / outcome</span>
 
-      <h3 class="section-heading--sub">Vibe "we are on the same wavelength"</h3>
-      <div class="section-body">
-        <p>Create your own atmosphere where you can feel "yourself/calm/safe", so that you spend an endless amount of time (and spend your money).</p>
-      </div>
-
-      <h3 class="section-heading--sub">Balance consistency and product diversity</h3>
-      <div class="section-body">
-        <p>Completely remove all the "dirt" on the marketplaces — no freedom for sellers. We create a tool — seller puts their product in the tool and it automatically adjusts to our guides.</p>
-      </div>
-
-      <h3 class="section-heading--sub">More spaciousness</h3>
-      <div class="section-body">
-        <p>3D models, marking in space/in a photo, without borders/frames, seamless interactive, AR. So that you can get stuck in a separate full-fledged world (and spend your money).</p>
+      <div class="vl-grid">
+        <div class="vl-col">
+          <p class="vl-col__title">Vibe "we are on the same wavelength"</p>
+          <p class="vl-col__body">Create your own atmosphere where you can feel "yourself/calm/safe", so that you spend an endless amount of time (and spend your money).</p>
+        </div>
+        <div class="vl-col">
+          <p class="vl-col__title">Balance consistency and product diversity</p>
+          <p class="vl-col__body">Completely remove all the "dirt" on the marketplaces — no freedom for sellers. We create a tool — seller puts their product in the tool and it automatically adjusts to our guides.</p>
+        </div>
+        <div class="vl-col">
+          <p class="vl-col__title">More spaciousness</p>
+          <p class="vl-col__body">3D models, marking in space/in a photo, without borders/frames, seamless interactive, AR. So that you can get stuck in a separate full-fledged world (and spend your money).</p>
+        </div>
       </div>
     </section>
 
@@ -485,66 +563,94 @@
 
       <span class="outcome-label">02 Design Principles / outcome</span>
 
-      <div class="bullet-group">
-        <p class="bullet-group__label">Clear design for easy achievement of goals</p>
-        <p class="section-tag" style="margin-bottom:8px">As a user:</p>
-        <ul class="bullet-list">
-          <li>I must clearly understand how to quickly and simply complete my task: place an order or achieve any other goal</li>
-          <li>I always understand what I see and what is happening, I don't need to look for hidden meanings</li>
-          <li>It's easy for me to make a decision, my choice is obvious and I expect that the product is ready to help me with this</li>
-        </ul>
-        <p class="section-tag" style="margin-top:14px;margin-bottom:8px">Our design:</p>
-        <ul class="bullet-list">
-          <li>Contains only those elements that help achieve the goal, it is accessible and understandable to use</li>
-          <li>Is unambiguous, all the elements have only one meaning, they cannot be interpreted in different ways</li>
-          <li>Helps to make the choice simple, we show only what the user needs and is interested in, we present the content as honestly and in detail as possible</li>
-        </ul>
-      </div>
+      <div class="principles-scroll">
 
-      <div class="bullet-group">
-        <p class="bullet-group__label">Boldness solutions for user experience</p>
-        <p class="section-tag" style="margin-bottom:8px">As a user:</p>
-        <ul class="bullet-list">
-          <li>I trust the non-standard solutions that the product offers me and expect that I will have no barriers to use</li>
-          <li>I want to get new emotions from interacting with the service, and that's why I choose it</li>
-          <li>I see non-standard solutions and want to share the experience of using them with others</li>
-        </ul>
-        <p class="section-tag" style="margin-top:14px;margin-bottom:8px">Our design:</p>
-        <ul class="bullet-list">
-          <li>Is decisive, we offer bold ideas that are not yet on the market, and we are not afraid of this</li>
-          <li>Is inspired not only by digital, but also by the surrounding physical world</li>
-          <li>Has been transformed from crazy ideas into practical cases</li>
-        </ul>
-      </div>
+        <div class="principle-card">
+          <p class="principle-card__title">Clear design for easy achievement of goals</p>
+          <div class="principle-card__cols">
+            <div>
+              <p class="principle-card__col-label">As a user</p>
+              <ul class="bullet-list">
+                <li>I must clearly understand how to quickly and simply complete my task: place an order or achieve any other goal</li>
+                <li>I always understand what I see and what is happening, I don't need to look for hidden meanings</li>
+                <li>It's easy for me to make a decision, my choice is obvious and I expect that the product is ready to help me with this</li>
+              </ul>
+            </div>
+            <div>
+              <p class="principle-card__col-label">Our design</p>
+              <ul class="bullet-list">
+                <li>Contains only those elements that help achieve the goal, it is accessible and understandable to use</li>
+                <li>Is unambiguous, all the elements have only one meaning, they cannot be interpreted in different ways</li>
+                <li>Helps to make the choice simple, we show only what the user needs and is interested in</li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
-      <div class="bullet-group">
-        <p class="bullet-group__label">Friendly &amp; helpful</p>
-        <p class="section-tag" style="margin-bottom:8px">As a user:</p>
-        <ul class="bullet-list">
-          <li>I trust this service, because not only are the best solutions and prices here, but they are also honest &amp; I will not be deceived here</li>
-          <li>I know that this service knows better than me what is really suitable for me</li>
-          <li>I can collect all my desires and goals here. This is my wish dashboard</li>
-        </ul>
-        <p class="section-tag" style="margin-top:14px;margin-bottom:8px">Our design:</p>
-        <ul class="bullet-list">
-          <li>Uses elements and technologies that help the user along his way to achieve the goal</li>
-          <li>Makes it easy for the user to make a choice</li>
-          <li>Is endearing and friendly which you can trust</li>
-        </ul>
-      </div>
+        <div class="principle-card">
+          <p class="principle-card__title">Boldness solutions for user experience</p>
+          <div class="principle-card__cols">
+            <div>
+              <p class="principle-card__col-label">As a user</p>
+              <ul class="bullet-list">
+                <li>I trust the non-standard solutions that the product offers me and expect that I will have no barriers to use</li>
+                <li>I want to get new emotions from interacting with the service, and that's why I choose it</li>
+                <li>I see non-standard solutions and want to share the experience of using them with others</li>
+              </ul>
+            </div>
+            <div>
+              <p class="principle-card__col-label">Our design</p>
+              <ul class="bullet-list">
+                <li>Is decisive, we offer bold ideas that are not yet on the market, and we are not afraid of this</li>
+                <li>Is inspired not only by digital, but also by the surrounding physical world</li>
+                <li>Has been transformed from crazy ideas into practical cases</li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
-      <div class="bullet-group">
-        <p class="bullet-group__label">Unified experience &amp; consistent design</p>
-        <p class="section-tag" style="margin-bottom:8px">As a user:</p>
-        <ul class="bullet-list">
-          <li>I always know how to use functionality, even if it's a different interaction, the experience retains consistency and continuity</li>
-          <li>I always recognize the service at any point of interaction with it</li>
-        </ul>
-        <p class="section-tag" style="margin-top:14px;margin-bottom:8px">Our design:</p>
-        <ul class="bullet-list">
-          <li>Is consistent from the point of view of experience and visual, even if we are doing something new, we remember that it is part of the overall picture</li>
-          <li>Principles are at the top of every decision</li>
-        </ul>
+        <div class="principle-card">
+          <p class="principle-card__title">Friendly &amp; helpful</p>
+          <div class="principle-card__cols">
+            <div>
+              <p class="principle-card__col-label">As a user</p>
+              <ul class="bullet-list">
+                <li>I trust this service, they are honest &amp; I will not be deceived here</li>
+                <li>I know that this service knows better than me what is really suitable for me</li>
+                <li>I can collect all my desires and goals here. This is my wish dashboard</li>
+              </ul>
+            </div>
+            <div>
+              <p class="principle-card__col-label">Our design</p>
+              <ul class="bullet-list">
+                <li>Uses elements and technologies that help the user along his way to achieve the goal</li>
+                <li>Makes it easy for the user to make a choice</li>
+                <li>Is endearing and friendly which you can trust</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="principle-card">
+          <p class="principle-card__title">Unified experience &amp; consistent design</p>
+          <div class="principle-card__cols">
+            <div>
+              <p class="principle-card__col-label">As a user</p>
+              <ul class="bullet-list">
+                <li>I always know how to use functionality, even if it's a different interaction, the experience retains consistency and continuity</li>
+                <li>I always recognize the service at any point of interaction with it</li>
+              </ul>
+            </div>
+            <div>
+              <p class="principle-card__col-label">Our design</p>
+              <ul class="bullet-list">
+                <li>Is consistent from the point of view of experience and visual, even if we are doing something new, we remember that it is part of the overall picture</li>
+                <li>Principles are at the top of every decision</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -562,21 +668,27 @@
 
       <span class="outcome-label">03 User Behavior / outcome</span>
 
-      <div class="pattern">
-        <p class="pattern__title">Spontaneous purchase</p>
-        <p class="pattern__flow">have money → see something → 😍 fall in love → buy it</p>
-      </div>
-      <div class="pattern">
-        <p class="pattern__title">Subconscious need</p>
-        <p class="pattern__flow">watching/reading/interested in a random topic → 😀 come across something → choose the best option → buy it</p>
-      </div>
-      <div class="pattern">
-        <p class="pattern__title">A conscious need</p>
-        <p class="pattern__flow">problem needs to be solved → reading/asking/looking for a solution → 🔱 find a perfect solution → choose the best option → buy it</p>
-      </div>
-      <div class="pattern">
-        <p class="pattern__title">Specific purchase</p>
-        <p class="pattern__flow">know exactly what I want → watching/reading/asking about the ideal option → 🛽 choosing the best offer → buy it</p>
+      <div class="behavior-grid">
+        <!-- top-left: color A (dark) -->
+        <div class="behavior-card behavior-card--a">
+          <p class="behavior-card__title">Spontaneous purchase</p>
+          <p class="behavior-card__flow">have money → see something → 😍 fall in love → buy it</p>
+        </div>
+        <!-- top-right: color B (light) -->
+        <div class="behavior-card behavior-card--b">
+          <p class="behavior-card__title">Subconscious need</p>
+          <p class="behavior-card__flow">watching/reading/interested in a random topic → 😀 come across something → choose the best option → buy it</p>
+        </div>
+        <!-- bottom-left: color B (light) -->
+        <div class="behavior-card behavior-card--b">
+          <p class="behavior-card__title">A conscious need</p>
+          <p class="behavior-card__flow">problem needs to be solved → reading/asking/looking for a solution → 🔱 find a perfect solution → choose the best option → buy it</p>
+        </div>
+        <!-- bottom-right: color A (dark) -->
+        <div class="behavior-card behavior-card--a">
+          <p class="behavior-card__title">Specific purchase</p>
+          <p class="behavior-card__flow">know exactly what I want → watching/reading/asking about the ideal option → 🛽 choosing the best offer → buy it</p>
+        </div>
       </div>
     </section>
 
