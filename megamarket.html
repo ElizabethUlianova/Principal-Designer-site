@@ -30,7 +30,6 @@
       color: var(--dark);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      overflow-x: hidden;
     }
 
     /* ── Nav ── */
@@ -162,17 +161,6 @@
       margin-bottom: 20px;
     }
 
-    .section-heading--sub {
-      font-size: 17px;
-      font-weight: 600;
-      color: var(--dark);
-      line-height: 1.3;
-      letter-spacing: -0.01em;
-      margin-bottom: 12px;
-      margin-top: 32px;
-    }
-    .section-heading--sub:first-child { margin-top: 0; }
-
     .section-body {
       font-size: 15px;
       font-weight: 400;
@@ -181,15 +169,27 @@
     }
     .section-body p + p { margin-top: 14px; }
 
+    /* ── Outcome heading ── */
+    .outcome-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--light);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
     /* ── Steps list (01–07) ── */
     .steps-list {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 2px;
       margin-top: 24px;
-      padding: 24px;
+      padding: 8px 0;
       background: var(--surface);
       border-radius: 12px;
+      overflow: hidden;
     }
 
     .steps-list__item {
@@ -197,6 +197,14 @@
       align-items: baseline;
       gap: 14px;
       font-size: 14px;
+      text-decoration: none;
+      color: inherit;
+      padding: 10px 20px;
+      transition: background 0.15s;
+      border-radius: 0;
+    }
+    .steps-list__item:hover {
+      background: var(--line);
     }
 
     .steps-list__num {
@@ -212,20 +220,6 @@
       color: var(--dark);
     }
 
-    /* ── Outcome label ── */
-    .outcome-label {
-      display: block;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--light);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 24px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--line);
-      width: 100%;
-    }
-
     /* ── 01 Visual Language: 3-column grid ── */
     .vl-grid {
       display: grid;
@@ -238,16 +232,16 @@
 
     .vl-col {
       background: var(--surface);
-      padding: 22px 20px;
+      padding: 24px 22px;
     }
 
     .vl-col__title {
-      font-size: 14px;
+      font-size: 20px;
       font-weight: 600;
       color: var(--dark);
-      line-height: 1.35;
-      letter-spacing: -0.01em;
-      margin-bottom: 10px;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
     }
 
     .vl-col__body {
@@ -257,36 +251,44 @@
       line-height: 1.7;
     }
 
-    /* ── 02 Design Principles: horizontal scroll cards ── */
+    /* ── 02 Design Principles: full-bleed horizontal scroll with snap ── */
     .principles-scroll {
+      /* Break out of max-width content constraint */
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+
+      /* Padding centers first/last card in the viewport */
+      padding-inline: calc(50vw - min(270px, 40vw));
+
+      /* Scroll + snap */
       display: flex;
-      gap: 10px;
+      gap: 12px;
       overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
       -ms-overflow-style: none;
-      /* bleed past content padding so card edges are visible */
-      margin-left:  calc(-1 * var(--ph));
-      margin-right: calc(-1 * var(--ph));
-      padding-left:  var(--ph);
-      padding-right: var(--ph);
-      padding-bottom: 4px;
+
+      padding-top: 2px;
+      padding-bottom: 8px;
     }
     .principles-scroll::-webkit-scrollbar { display: none; }
 
     .principle-card {
       flex-shrink: 0;
       width: min(540px, 80vw);
+      scroll-snap-align: center;
       background: var(--surface);
       border-radius: 12px;
       padding: 24px;
     }
 
     .principle-card__title {
-      font-size: 15px;
+      font-size: 20px;
       font-weight: 600;
       color: var(--dark);
-      line-height: 1.3;
-      letter-spacing: -0.01em;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
       margin-bottom: 18px;
       padding-bottom: 16px;
       border-bottom: 1px solid var(--line);
@@ -347,14 +349,40 @@
     }
 
     /* top-left + bottom-right: dark */
-    .behavior-card--a { background: var(--dark); }
-    .behavior-card--a .behavior-card__title { color: var(--white); font-size: 15px; font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; }
-    .behavior-card--a .behavior-card__flow  { color: rgba(255,255,255,0.45); font-size: 13px; font-weight: 400; line-height: 1.7; }
+    .behavior-card--a {
+      background: var(--dark);
+    }
+    .behavior-card--a .behavior-card__title {
+      color: var(--white);
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+    .behavior-card--a .behavior-card__flow {
+      color: rgba(255,255,255,0.45);
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.7;
+    }
 
     /* top-right + bottom-left: light */
-    .behavior-card--b { background: var(--surface); }
-    .behavior-card--b .behavior-card__title { color: var(--dark); font-size: 15px; font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; }
-    .behavior-card--b .behavior-card__flow  { color: var(--mid); font-size: 13px; font-weight: 400; line-height: 1.7; }
+    .behavior-card--b {
+      background: var(--surface);
+    }
+    .behavior-card--b .behavior-card__title {
+      color: var(--dark);
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+    .behavior-card--b .behavior-card__flow {
+      color: var(--mid);
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.7;
+    }
 
     /* ── Image ── */
     .project-img {
@@ -363,6 +391,10 @@
       display: block;
       background: var(--surface);
       margin: 32px 0;
+    }
+    /* First image: no background tray */
+    .project-img--transparent {
+      background: transparent;
     }
     .project-img img {
       width: 100%;
@@ -469,7 +501,8 @@
   <div class="content">
     <header class="project-hero">
       <p class="project-company">Megamarket</p>
-      <h1 class="project-title">The journey of rethinking the marketplace</h1>
+      <h1 class="project-title">Principal Product Design</h1>
+      <p class="project-subtitle">End-to-end design process</p>
       <div class="project-meta">
         <div class="project-meta__item">
           <span class="project-meta__label">Period</span>
@@ -489,37 +522,59 @@
     <!-- ── Situation ── -->
     <section class="section">
       <p class="section-tag">Situation</p>
-      <h2 class="section-heading">Outdated UI and generic UX</h2>
+      <h2 class="section-heading">The problem to solve</h2>
       <div class="section-body">
         <p>The marketplace had been grown fast by attracting users for high cashbacks and discounts, but UI was outdated and UX was too generic. It didn't reflect the specifics of different categories like fashion, beauty, FMCG, etc, which made it hard to scale and it affected conversion.</p>
       </div>
 
-      <div class="project-img">
-        <img src="Images/new&old.png" alt="Megamarket — situation">
+      <div class="project-img project-img--transparent">
+        <img src="Images/megamarket1.png" alt="Megamarket — situation">
       </div>
     </section>
 
     <!-- ── Task ── -->
     <section class="section">
       <p class="section-tag">Task</p>
-      <h2 class="section-heading">Rethink the customer's experience</h2>
+      <h2 class="section-heading">Build a consistent, flexible system</h2>
       <div class="section-body">
-        <p>My task was to build a consistent and the same time flexible system — something scalable, but still unique for each category. It wasn't just about visuals — <br>it was a <strong style="color:var(--dark);font-weight:600">full rethinking of how customers interact with the marketplace.</strong></p>
+        <p>My task was to build a consistent and the same time flexible system — something scalable, but still unique for each category. It wasn't just about visuals — it was a <strong style="color:var(--dark);font-weight:600">full rethinking of how customers interact with the marketplace.</strong></p>
       </div>
 
+      <p class="section-tag" style="margin-top:32px">Actions</p>
       <div class="steps-list">
-        <div class="steps-list__item"><span class="steps-list__num">01</span><span class="steps-list__label">Visual language</span></div>
-        <div class="steps-list__item"><span class="steps-list__num">02</span><span class="steps-list__label">Design principles</span></div>
-        <div class="steps-list__item"><span class="steps-list__num">03</span><span class="steps-list__label">User behavior</span></div>
-        <div class="steps-list__item"><span class="steps-list__num">04</span><span class="steps-list__label">Bunch of ideas</span></div>
-        <div class="steps-list__item"><span class="steps-list__num">05</span><span class="steps-list__label">First concepts</span></div>
-        <div class="steps-list__item"><span class="steps-list__num">06</span><span class="steps-list__label">Basic flow</span></div>
-        <div class="steps-list__item"><span class="steps-list__num">07</span><span class="steps-list__label">Scaled solutions</span></div>
+        <a class="steps-list__item" href="#section-01">
+          <span class="steps-list__num">01</span>
+          <span class="steps-list__label">Visual language</span>
+        </a>
+        <a class="steps-list__item" href="#section-02">
+          <span class="steps-list__num">02</span>
+          <span class="steps-list__label">Design principles</span>
+        </a>
+        <a class="steps-list__item" href="#section-03">
+          <span class="steps-list__num">03</span>
+          <span class="steps-list__label">User behavior</span>
+        </a>
+        <a class="steps-list__item" href="#section-04">
+          <span class="steps-list__num">04</span>
+          <span class="steps-list__label">Bunch of ideas</span>
+        </a>
+        <a class="steps-list__item" href="#section-05">
+          <span class="steps-list__num">05</span>
+          <span class="steps-list__label">First concepts</span>
+        </a>
+        <a class="steps-list__item" href="#section-06">
+          <span class="steps-list__num">06</span>
+          <span class="steps-list__label">Basic flow</span>
+        </a>
+        <a class="steps-list__item" href="#section-07">
+          <span class="steps-list__num">07</span>
+          <span class="steps-list__label">Scaled solutions</span>
+        </a>
       </div>
     </section>
 
     <!-- ── 01 Visual Language ── -->
-    <section class="section">
+    <section class="section" id="section-01">
       <p class="section-tag">Action 01</p>
       <h2 class="section-heading">Visual Language</h2>
       <div class="section-body">
@@ -530,7 +585,7 @@
         <img src="Images/megamarket2.png" alt="Megamarket — visual language">
       </div>
 
-      <span class="outcome-label">01 Visual Language / outcome</span>
+      <h2 class="outcome-label">outcome</h2>
 
       <div class="vl-grid">
         <div class="vl-col">
@@ -549,7 +604,7 @@
     </section>
 
     <!-- ── 02 Design Principles ── -->
-    <section class="section">
+    <section class="section" id="section-02">
       <p class="section-tag">Action 02</p>
       <h2 class="section-heading">Design Principles</h2>
       <div class="section-body">
@@ -560,101 +615,105 @@
         <img src="Images/megamarket3.png" alt="Megamarket — design principles">
       </div>
 
-      <span class="outcome-label">02 Design Principles / outcome</span>
-
-      <div class="principles-scroll">
-
-        <div class="principle-card">
-          <p class="principle-card__title">Clear design for easy achievement of goals</p>
-          <div class="principle-card__cols">
-            <div>
-              <p class="principle-card__col-label">As a user</p>
-              <ul class="bullet-list">
-                <li>I must clearly understand how to quickly and simply complete my task: place an order or achieve any other goal</li>
-                <li>I always understand what I see and what is happening, I don't need to look for hidden meanings</li>
-                <li>It's easy for me to make a decision, my choice is obvious and I expect that the product is ready to help me with this</li>
-              </ul>
-            </div>
-            <div>
-              <p class="principle-card__col-label">Our design</p>
-              <ul class="bullet-list">
-                <li>Contains only those elements that help achieve the goal, it is accessible and understandable to use</li>
-                <li>Is unambiguous, all the elements have only one meaning, they cannot be interpreted in different ways</li>
-                <li>Helps to make the choice simple, we show only what the user needs and is interested in</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="principle-card">
-          <p class="principle-card__title">Boldness solutions for user experience</p>
-          <div class="principle-card__cols">
-            <div>
-              <p class="principle-card__col-label">As a user</p>
-              <ul class="bullet-list">
-                <li>I trust the non-standard solutions that the product offers me and expect that I will have no barriers to use</li>
-                <li>I want to get new emotions from interacting with the service, and that's why I choose it</li>
-                <li>I see non-standard solutions and want to share the experience of using them with others</li>
-              </ul>
-            </div>
-            <div>
-              <p class="principle-card__col-label">Our design</p>
-              <ul class="bullet-list">
-                <li>Is decisive, we offer bold ideas that are not yet on the market, and we are not afraid of this</li>
-                <li>Is inspired not only by digital, but also by the surrounding physical world</li>
-                <li>Has been transformed from crazy ideas into practical cases</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="principle-card">
-          <p class="principle-card__title">Friendly &amp; helpful</p>
-          <div class="principle-card__cols">
-            <div>
-              <p class="principle-card__col-label">As a user</p>
-              <ul class="bullet-list">
-                <li>I trust this service, they are honest &amp; I will not be deceived here</li>
-                <li>I know that this service knows better than me what is really suitable for me</li>
-                <li>I can collect all my desires and goals here. This is my wish dashboard</li>
-              </ul>
-            </div>
-            <div>
-              <p class="principle-card__col-label">Our design</p>
-              <ul class="bullet-list">
-                <li>Uses elements and technologies that help the user along his way to achieve the goal</li>
-                <li>Makes it easy for the user to make a choice</li>
-                <li>Is endearing and friendly which you can trust</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="principle-card">
-          <p class="principle-card__title">Unified experience &amp; consistent design</p>
-          <div class="principle-card__cols">
-            <div>
-              <p class="principle-card__col-label">As a user</p>
-              <ul class="bullet-list">
-                <li>I always know how to use functionality, even if it's a different interaction, the experience retains consistency and continuity</li>
-                <li>I always recognize the service at any point of interaction with it</li>
-              </ul>
-            </div>
-            <div>
-              <p class="principle-card__col-label">Our design</p>
-              <ul class="bullet-list">
-                <li>Is consistent from the point of view of experience and visual, even if we are doing something new, we remember that it is part of the overall picture</li>
-                <li>Principles are at the top of every decision</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-      </div>
+      <h2 class="outcome-label">outcome</h2>
     </section>
+  </div><!-- /content — break out for full-bleed scroll -->
+
+  <!-- Full-bleed horizontal scroll for principles (outside .content) -->
+  <div class="principles-scroll">
+
+    <div class="principle-card">
+      <p class="principle-card__title">Clear design for easy achievement of goals</p>
+      <div class="principle-card__cols">
+        <div>
+          <p class="principle-card__col-label">As a user</p>
+          <ul class="bullet-list">
+            <li>I must clearly understand how to quickly and simply complete my task: place an order or achieve any other goal</li>
+            <li>I always understand what I see and what is happening, I don't need to look for hidden meanings</li>
+            <li>It's easy for me to make a decision, my choice is obvious and I expect that the product is ready to help me with this</li>
+          </ul>
+        </div>
+        <div>
+          <p class="principle-card__col-label">Our design</p>
+          <ul class="bullet-list">
+            <li>Contains only those elements that help achieve the goal, it is accessible and understandable to use</li>
+            <li>Is unambiguous, all the elements have only one meaning, they cannot be interpreted in different ways</li>
+            <li>Helps to make the choice simple, we show only what the user needs and is interested in</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="principle-card">
+      <p class="principle-card__title">Boldness solutions for user experience</p>
+      <div class="principle-card__cols">
+        <div>
+          <p class="principle-card__col-label">As a user</p>
+          <ul class="bullet-list">
+            <li>I trust the non-standard solutions that the product offers me and expect that I will have no barriers to use</li>
+            <li>I want to get new emotions from interacting with the service, and that's why I choose it</li>
+            <li>I see non-standard solutions and want to share the experience of using them with others</li>
+          </ul>
+        </div>
+        <div>
+          <p class="principle-card__col-label">Our design</p>
+          <ul class="bullet-list">
+            <li>Is decisive, we offer bold ideas that are not yet on the market, and we are not afraid of this</li>
+            <li>Is inspired not only by digital, but also by the surrounding physical world</li>
+            <li>Has been transformed from crazy ideas into practical cases</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="principle-card">
+      <p class="principle-card__title">Friendly &amp; helpful</p>
+      <div class="principle-card__cols">
+        <div>
+          <p class="principle-card__col-label">As a user</p>
+          <ul class="bullet-list">
+            <li>I trust this service, they are honest &amp; I will not be deceived here</li>
+            <li>I know that this service knows better than me what is really suitable for me</li>
+            <li>I can collect all my desires and goals here. This is my wish dashboard</li>
+          </ul>
+        </div>
+        <div>
+          <p class="principle-card__col-label">Our design</p>
+          <ul class="bullet-list">
+            <li>Uses elements and technologies that help the user along his way to achieve the goal</li>
+            <li>Makes it easy for the user to make a choice</li>
+            <li>Is endearing and friendly which you can trust</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="principle-card">
+      <p class="principle-card__title">Unified experience &amp; consistent design</p>
+      <div class="principle-card__cols">
+        <div>
+          <p class="principle-card__col-label">As a user</p>
+          <ul class="bullet-list">
+            <li>I always know how to use functionality, even if it's a different interaction, the experience retains consistency and continuity</li>
+            <li>I always recognize the service at any point of interaction with it</li>
+          </ul>
+        </div>
+        <div>
+          <p class="principle-card__col-label">Our design</p>
+          <ul class="bullet-list">
+            <li>Is consistent from the point of view of experience and visual, even if we are doing something new, we remember that it is part of the overall picture</li>
+            <li>Principles are at the top of every decision</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /principles-scroll -->
+
+  <div class="content"><!-- resume .content -->
 
     <!-- ── 03 User Behavior ── -->
-    <section class="section">
+    <section class="section" id="section-03">
       <p class="section-tag">Action 03</p>
       <h2 class="section-heading">User Behavior</h2>
       <div class="section-body">
@@ -665,25 +724,21 @@
         <img src="Images/megamarket4.png" alt="Megamarket — user behavior">
       </div>
 
-      <span class="outcome-label">03 User Behavior / outcome</span>
+      <h2 class="outcome-label">outcome</h2>
 
       <div class="behavior-grid">
-        <!-- top-left: color A (dark) -->
         <div class="behavior-card behavior-card--a">
           <p class="behavior-card__title">Spontaneous purchase</p>
           <p class="behavior-card__flow">have money → see something → 😍 fall in love → buy it</p>
         </div>
-        <!-- top-right: color B (light) -->
         <div class="behavior-card behavior-card--b">
           <p class="behavior-card__title">Subconscious need</p>
           <p class="behavior-card__flow">watching/reading/interested in a random topic → 😀 come across something → choose the best option → buy it</p>
         </div>
-        <!-- bottom-left: color B (light) -->
         <div class="behavior-card behavior-card--b">
           <p class="behavior-card__title">A conscious need</p>
           <p class="behavior-card__flow">problem needs to be solved → reading/asking/looking for a solution → 🔱 find a perfect solution → choose the best option → buy it</p>
         </div>
-        <!-- bottom-right: color A (dark) -->
         <div class="behavior-card behavior-card--a">
           <p class="behavior-card__title">Specific purchase</p>
           <p class="behavior-card__flow">know exactly what I want → watching/reading/asking about the ideal option → 🛽 choosing the best offer → buy it</p>
@@ -692,7 +747,7 @@
     </section>
 
     <!-- ── 04 Bunch of Ideas ── -->
-    <section class="section">
+    <section class="section" id="section-04">
       <p class="section-tag">Action 04</p>
       <h2 class="section-heading">Bunch of Ideas</h2>
       <div class="section-body">
@@ -703,7 +758,7 @@
         <img src="Images/megamarket5.png" alt="Megamarket — ideas">
       </div>
 
-      <span class="outcome-label">04 Bunch of Ideas / outcome</span>
+      <h2 class="outcome-label">outcome</h2>
 
       <div class="section-body">
         <p>As a result, I generated more than 45 ideas for what a marketplace could look like, each with its problem statement and contextual use case. These ranged from straightforward concepts like an AI-powered search assistant to more unconventional directions — for example, a turnkey digital replica of your home with items organized by real-life categories.</p>
@@ -711,14 +766,14 @@
     </section>
 
     <!-- ── 05 First Concepts ── -->
-    <section class="section">
+    <section class="section" id="section-05">
       <p class="section-tag">Action 05</p>
       <h2 class="section-heading">First Concepts</h2>
       <div class="section-body">
         <p>Of course, no one needs to implement all the ideas at once. It was necessary to determine the core idea and functionality, so I grouped all the ideas according to the main messages.</p>
       </div>
 
-      <span class="outcome-label" style="margin-top:32px">05 First Concepts / outcome</span>
+      <h2 class="outcome-label" style="margin-top:32px">outcome</h2>
 
       <div class="section-body">
         <p>Overall, I came up with 9 complete concepts. One was the minimum viable version — the core fixes we needed to implement first, without any bells and whistles — and the other 8 explored various possible directions for the marketplace.</p>
@@ -726,7 +781,7 @@
     </section>
 
     <!-- ── 06 Basic Flow ── -->
-    <section class="section">
+    <section class="section" id="section-06">
       <p class="section-tag">Action 06</p>
       <h2 class="section-heading">Basic Flow</h2>
       <div class="section-body">
@@ -737,7 +792,7 @@
         <img src="Images/megamarket6.png" alt="Megamarket — basic flow">
       </div>
 
-      <span class="outcome-label">06 Basic Flow / outcome</span>
+      <h2 class="outcome-label">outcome</h2>
 
       <div class="section-body">
         <p>Every piece of the product has been updated not only based on the concept, but also taking into account research, metrics, and progressive A/B testing. This eventually led to significant results across the entire funnel.</p>
@@ -760,7 +815,7 @@
     </section>
 
     <!-- ── 07 Scaled Solutions ── -->
-    <section class="section">
+    <section class="section" id="section-07">
       <p class="section-tag">Action 07</p>
       <h2 class="section-heading">Scaled Solutions</h2>
       <div class="section-body">
@@ -778,7 +833,8 @@
       <p class="thanks__body">If you'd like to dive deeper into how I approach a single feature — from identifying the problem to researching, ideating, and validating the final solution — I'd be glad to share a detailed example in our next meeting.</p>
       <a class="thanks__cta" href="index.html">← back to timeline</a>
     </section>
-  </div>
+
+  </div><!-- /content -->
 
 </body>
 </html>
