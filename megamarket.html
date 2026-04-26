@@ -32,56 +32,87 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
-    /* ── Nav ── */
-    .nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
+    /* ══ HEADER (identical to main page) ══ */
+    .site-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
       background: rgba(255,255,255,0.94);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--line);
     }
 
-    .nav__inner {
+    .site-header__inner {
       max-width: var(--max-w);
       margin: 0 auto;
-      padding: 18px var(--ph);
+      padding: 22px var(--ph);
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
     }
 
-    .nav__back {
+    .nav-link {
+      font-family: 'Poppins', sans-serif;
       font-size: 14px;
       font-weight: 400;
-      color: var(--mid);
+      color: var(--dark);
       text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: color 0.15s;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+      line-height: inherit;
+      transition: color 0.15s ease;
     }
-    .nav__back:hover { color: var(--dark); }
+    .nav-link:hover { color: var(--light); }
 
-    .nav__title {
-      font-size: 12px;
+    /* ══ TOAST ══ */
+    .toast {
+      position: fixed;
+      bottom: 32px; left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: var(--dark);
+      color: var(--white);
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
       font-weight: 400;
-      color: var(--light);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
+      padding: 12px 24px;
+      border-radius: 100px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease, transform 0.22s ease;
+      z-index: 900;
+      white-space: nowrap;
     }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* ── Layout ── */
+    /* ══ LAYOUT ══ */
     .content {
       max-width: var(--max-w);
       margin: 0 auto;
       padding: 0 var(--ph);
     }
 
+    /* ── Back link (below header, outside nav) ── */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--mid);
+      text-decoration: none;
+      transition: color 0.15s;
+      /* sits in the content flow, padded from header */
+      padding-top: 92px; /* header ≈ 68px + 24px breathing room */
+      padding-bottom: 0;
+    }
+    .back-link:hover { color: var(--dark); }
+
     /* ── Project hero ── */
     .project-hero {
-      padding: 72px 0 64px;
+      padding: 36px 0 64px;
       border-bottom: 1px solid var(--line);
     }
 
@@ -143,6 +174,9 @@
     }
     .section:last-child { border-bottom: none; }
 
+    /* anchor offset for fixed header */
+    .section[id] { scroll-margin-top: 80px; }
+
     .section-tag {
       font-size: 11px;
       font-weight: 600;
@@ -179,7 +213,7 @@
       margin-bottom: 20px;
     }
 
-    /* ── Steps list (01–07) ── */
+    /* ── Steps list ── */
     .steps-list {
       display: flex;
       flex-direction: column;
@@ -199,12 +233,12 @@
       text-decoration: none;
       color: inherit;
       padding: 10px 20px;
-      transition: background 0.15s;
-      border-radius: 0;
+      /* no background on hover — text color change only */
+      transition: color 0.15s;
     }
-    .steps-list__item:hover {
-      background: var(--line);
-    }
+    /* hover: dim both num and label to --light */
+    .steps-list__item:hover .steps-list__num  { color: var(--light); }
+    .steps-list__item:hover .steps-list__label { color: var(--light); }
 
     .steps-list__num {
       font-size: 11px;
@@ -212,26 +246,26 @@
       color: var(--light);
       letter-spacing: 0.06em;
       min-width: 22px;
+      transition: color 0.15s;
     }
 
     .steps-list__label {
       font-weight: 400;
       color: var(--dark);
+      transition: color 0.15s;
     }
 
-    /* ── 01 Visual Language: 3-column grid ── */
+    /* ── 01 Visual Language: 3 separate column cards ── */
     .vl-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--line);
-      border-radius: 12px;
-      overflow: hidden;
+      gap: 12px;       /* visible gap → separate cards */
     }
 
     .vl-col {
       background: var(--surface);
       padding: 24px 22px;
+      border-radius: 12px;   /* each column is its own card */
     }
 
     .vl-col__title {
@@ -250,14 +284,18 @@
       line-height: 1.7;
     }
 
-    /* ── 02 Design Principles: full-bleed horizontal scroll with snap ── */
+    /* ── 02 Design Principles: left-aligned scroll, start-snap ── */
+    /*
+      .principles-scroll is placed as a direct sibling of .content
+      in the body, so it's naturally full-viewport-wide.
+      padding-left aligns the first card's left edge with .content's inner left.
+      scroll-snap-align: start → each card snaps flush to content left.
+    */
     .principles-scroll {
-      /* Break out of max-width content constraint */
-      width: 100vw;
-      margin-left: calc(50% - 50vw);
-
-      /* Padding centers first/last card in the viewport */
-      padding-inline: calc(50vw - min(270px, 40vw));
+      /* Padding-left: matches content left edge at any viewport width */
+      padding-left: max(var(--ph), calc(50vw - var(--max-w) / 2 + var(--ph)));
+      /* Padding-right: content right edge, so last card doesn't flush to edge */
+      padding-right: max(var(--ph), calc(50vw - var(--max-w) / 2 + var(--ph)));
 
       /* Scroll + snap */
       display: flex;
@@ -275,8 +313,9 @@
 
     .principle-card {
       flex-shrink: 0;
-      width: min(540px, 80vw);
-      scroll-snap-align: center;
+      /* 20% wider than the previous 540px = 648px */
+      width: min(648px, 88vw);
+      scroll-snap-align: start;   /* snaps left edge to content left */
       background: var(--surface);
       border-radius: 12px;
       padding: 24px;
@@ -330,14 +369,11 @@
       color: var(--light);
     }
 
-    /* ── 03 User Behavior: 2×2 card grid ── */
+    /* ── 03 User Behavior: 2×2 visually separate cards ── */
     .behavior-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1px;
-      background: var(--line);
-      border-radius: 12px;
-      overflow: hidden;
+      gap: 12px;   /* visible gap → separate cards */
     }
 
     .behavior-card {
@@ -345,42 +381,29 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
+      border-radius: 12px;   /* each card stands alone */
     }
 
-    /* top-left + bottom-right: dark */
-    .behavior-card--a {
-      background: var(--dark);
-    }
+    .behavior-card--a { background: var(--dark); }
     .behavior-card--a .behavior-card__title {
       color: var(--white);
-      font-size: 20px;
-      font-weight: 600;
-      line-height: 1.25;
-      letter-spacing: -0.02em;
+      font-size: 20px; font-weight: 600;
+      line-height: 1.25; letter-spacing: -0.02em;
     }
     .behavior-card--a .behavior-card__flow {
       color: rgba(255,255,255,0.45);
-      font-size: 13px;
-      font-weight: 400;
-      line-height: 1.7;
+      font-size: 13px; font-weight: 400; line-height: 1.7;
     }
 
-    /* top-right + bottom-left: light */
-    .behavior-card--b {
-      background: var(--surface);
-    }
+    .behavior-card--b { background: var(--surface); }
     .behavior-card--b .behavior-card__title {
       color: var(--dark);
-      font-size: 20px;
-      font-weight: 600;
-      line-height: 1.25;
-      letter-spacing: -0.02em;
+      font-size: 20px; font-weight: 600;
+      line-height: 1.25; letter-spacing: -0.02em;
     }
     .behavior-card--b .behavior-card__flow {
       color: var(--mid);
-      font-size: 13px;
-      font-weight: 400;
-      line-height: 1.7;
+      font-size: 13px; font-weight: 400; line-height: 1.7;
     }
 
     /* ── Image ── */
@@ -391,10 +414,7 @@
       background: var(--surface);
       margin: 32px 0;
     }
-    /* First image: no background tray */
-    .project-img--transparent {
-      background: transparent;
-    }
+    .project-img--transparent { background: transparent; }
     .project-img img {
       width: 100%;
       height: auto;
@@ -475,10 +495,10 @@
     .thanks__cta:hover { border-color: var(--dark); }
 
     /* ── Responsive ── */
-    @media (max-width: 600px) {
+    @media (max-width: 680px) {
       :root { --ph: 20px; }
       .metrics { grid-template-columns: 1fr; }
-      .project-hero { padding: 48px 0 48px; }
+      .project-hero { padding: 24px 0 48px; }
       .section { padding: 48px 0; }
       .vl-grid { grid-template-columns: 1fr; }
       .behavior-grid { grid-template-columns: 1fr; }
@@ -488,15 +508,28 @@
 </head>
 <body>
 
-  <!-- ── Nav ── -->
-  <nav class="nav">
-    <div class="nav__inner">
-      <a class="nav__back" href="index.html">← back</a>
-      <span class="nav__title">Lisa Ulianova</span>
+  <!-- ══ HEADER — same as main page ══ -->
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="nav-link"
+         href="https://drive.google.com/file/d/19tb9gj1e-qZ0qulqctaSGvokbVMu8o4n/view?usp=sharing"
+         target="_blank" rel="noopener noreferrer">cv</a>
+      <button class="nav-link" id="emailBtn" type="button">email</button>
+      <a class="nav-link"
+         href="https://www.linkedin.com/in/lisaulianova/"
+         target="_blank" rel="noopener noreferrer">linkedin</a>
     </div>
-  </nav>
+  </header>
 
-  <!-- ── Project hero ── -->
+  <!-- ══ TOAST ══ -->
+  <div class="toast" id="toast">email copied. lookin' forward to your message 🙌🏻</div>
+
+  <!-- ══ BACK LINK — outside header ══ -->
+  <div class="content">
+    <a class="back-link" href="index.html">← back</a>
+  </div>
+
+  <!-- ══ CONTENT ══ -->
   <div class="content">
     <header class="project-hero">
       <p class="project-company">Megamarket</p>
@@ -615,9 +648,9 @@
 
       <h2 class="outcome-label">Outcome</h2>
     </section>
-  </div><!-- /content — break out for full-bleed scroll -->
+  </div><!-- /content — break for full-bleed scroll -->
 
-  <!-- Full-bleed horizontal scroll for principles (outside .content) -->
+  <!-- ── Principles: full-bleed, left-aligned start-snap ── -->
   <div class="principles-scroll">
 
     <div class="principle-card">
@@ -708,7 +741,7 @@
 
   </div><!-- /principles-scroll -->
 
-  <div class="content"><!-- resume .content -->
+  <div class="content">
 
     <!-- ── 03 User Behavior ── -->
     <section class="section" id="section-03">
@@ -834,5 +867,30 @@
 
   </div><!-- /content -->
 
+  <script>
+    'use strict';
+    /* ── Email copy (same as main page) ── */
+    document.getElementById('emailBtn').addEventListener('click', function () {
+      var email = 'elizabethulianova@gmail.com';
+      function showToast() {
+        var t = document.getElementById('toast');
+        t.classList.add('show');
+        setTimeout(function () { t.classList.remove('show'); }, 3400);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(email).then(showToast).catch(fallback);
+      } else { fallback(); }
+      function fallback() {
+        var ta = document.createElement('textarea');
+        ta.value = email;
+        ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
+        document.body.appendChild(ta);
+        ta.focus(); ta.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(ta);
+        showToast();
+      }
+    });
+  </script>
 </body>
 </html>
